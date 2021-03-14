@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "start": "rollup -c -w --environment DEV",
+    "build": "rollup -c --environment PROD"
+  }
+}
