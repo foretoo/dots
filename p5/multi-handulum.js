@@ -50,13 +50,6 @@ class Hand extends p5.Vector {
     this.x = this.parent.x + sin(this.angle) * this.length
     this.y = this.parent.y + cos(this.angle) * this.length
   }
-
-  draw() {
-    fill(191)
-    circle(this.x, this.y, this.mass/3)
-    stroke(191)
-    line(this.parent.x, this.parent.y, this.x, this.y)
-  }
 }
 
 function initHands(num) {
@@ -103,14 +96,14 @@ function update() {
 function draw() {
   if (frameCount > START && frameCount < END) {
     update()
-    image(trace, 0, 0)
-    for (hand of hands) hand.draw()
-    // hands[hands.length-1].draw()
     trace.line(hands[hands.length-1].x, hands[hands.length-1].y, px, py)
+    image(trace, 0, 0)
   }
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight)
+  trace.width = windowWidth
+  trace.height = windowHeight
   hands[0].parent.x = width/2
 }
