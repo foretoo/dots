@@ -1,6 +1,6 @@
 let hands, trace, px, py
 const START = 61
-const END = 1334
+const END = 1317
 const NUM = 5
 const GR = 0.0333
 let f = 1.001
@@ -73,11 +73,10 @@ function setup() {
   createCanvas(windowWidth, windowHeight)
   background(0)
   noStroke()
+  noLoop()
   trace = createGraphics(width, height)
-  trace.background(0)
   trace.stroke(255)
-  trace.strokeWeight(7)
-  hands = initHands(NUM)
+  trace.strokeWeight(5)
 }
 
 ////////-- UPDATE --////////
@@ -85,7 +84,6 @@ function update() {
   f -= 0.00001
   px = hands[hands.length-1].x
   py = hands[hands.length-1].y
-  hands[0].angle += (Math.random() - 0.5) * (Math.PI / 180 * f)
   for (hand of hands) {
     hand.length -= Math.random() / 25
     hand.update()
@@ -94,7 +92,14 @@ function update() {
 
 ////////-- DRAW --////////
 function draw() {
-  if (frameCount > START && frameCount < END) {
+  if (frameCount < START) {
+    trace.background(0)
+  }
+  else if (frameCount > END) {
+    button.disabled = false
+    noLoop()
+  }
+  else {
     update()
     trace.line(hands[hands.length-1].x, hands[hands.length-1].y, px, py)
     image(trace, 0, 0)
@@ -106,4 +111,14 @@ function windowResized() {
   trace.width = windowWidth
   trace.height = windowHeight
   hands[0].parent.x = width/2
+}
+
+const button = document.getElementById('draw')
+button.onclick = () => {
+  button.innerHTML = 'Redraw'
+  button.disabled = true
+  f = 1.001
+  frameCount = 0
+  hands = initHands(NUM)
+  loop()
 }
