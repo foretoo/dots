@@ -2,8 +2,8 @@ let hands, trace, px, py
 const START = 61
 const END = 1387
 const NUM = 5
-let g = 0.0417
-let f = 1.001
+let g = 0.0477
+let f = 1
 
 class Hand extends p5.Vector {
   constructor(props) {
@@ -21,7 +21,7 @@ class Hand extends p5.Vector {
 
     this.parent = props.parent || null
     this.child = props.child || null
-    this.length = props.length || lengthQ / (NUM + Math.random() * NUM * 1.333)
+    this.length = props.length || lengthQ / ((Math.random() + 1.25) * NUM)
     this.mass = props.mass || massQ + Math.random() * massQ
     this.angle = props.angle || Math.PI * (Math.random() - 0.5) * 2
     this.x = this.parent.x + sin(this.angle) * this.length
@@ -129,6 +129,6 @@ button.onclick = () => {
   f = 1.001
   frameCount = 0
   hands = initHands(NUM)
-  if (height > width) g *= (width / height) * 1.333
+  if (height > width) g *= width / height
   loop()
 }
