@@ -1,6 +1,6 @@
 let hands, trace, px, py
 const START = 61
-const END = 1447
+const END = 1387
 const NUM = 5
 let g = 0.0417
 let f = 1.001
@@ -96,7 +96,7 @@ function setup() {
   noLoop()
   trace = createGraphics(width, height)
   trace.stroke(255)
-  trace.strokeWeight(5)
+  trace.strokeWeight(3 * (width / height))
 }
 
 ////////-- UPDATE --////////
@@ -104,7 +104,7 @@ function update() {
   px = hands[hands.length-1].x
   py = hands[hands.length-1].y
   for (hand of hands) {
-    if (frameCount < END * 0.75) hand.length -= Math.random() / 29
+    if (frameCount < END * 0.8) hand.length -= Math.random() / (37 * (height / width))
     hand.update()
   }
 }
@@ -120,11 +120,11 @@ function draw() {
     noLoop()
   }
   else {
-    frameCount < END * 0.75 ? f -= 0.00001 : f -= 0.0001
+    frameCount < END * 0.8 ? f -= 0.00001 : f -= 0.0001
     update()
     trace.line(hands[hands.length-1].x, hands[hands.length-1].y, px, py)
     image(trace, 0, 0)
-    // for (hand of hands) hand.draw()
+    for (hand of hands) hand.draw()
   }
 }
 
@@ -143,6 +143,6 @@ button.onclick = () => {
   f = 1.001
   frameCount = 0
   hands = initHands(NUM)
-  if (height > width) g *= width / height
+  if (height > width) g *= (width / height) * 1.333
   loop()
 }
