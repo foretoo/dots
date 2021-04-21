@@ -2,8 +2,8 @@ let hands, trace, px, py
 const START = 61
 const END = 1387
 const NUM = 5
-let g = 0.0417
-let f = 1.001
+let g = 0.0477
+let f = 1
 
 class Hand extends p5.Vector {
   constructor(props) {
@@ -21,7 +21,7 @@ class Hand extends p5.Vector {
 
     this.parent = props.parent || null
     this.child = props.child || null
-    this.length = props.length || lengthQ / (NUM + Math.random() * NUM)
+    this.length = props.length || lengthQ / ((Math.random() + 1.25) * NUM)
     this.mass = props.mass || massQ + Math.random() * massQ
     this.angle = props.angle || Math.PI * (Math.random() - 0.5) * 2
     this.x = this.parent.x + sin(this.angle) * this.length
@@ -94,9 +94,6 @@ function setup() {
   createCanvas(windowWidth, windowHeight)
   background(0)
   noLoop()
-  trace = createGraphics(width, height)
-  trace.stroke(255)
-  trace.strokeWeight(3 * (width / height))
 }
 
 ////////-- UPDATE --////////
@@ -124,7 +121,7 @@ function draw() {
     update()
     trace.line(hands[hands.length-1].x, hands[hands.length-1].y, px, py)
     image(trace, 0, 0)
-    for (hand of hands) hand.draw()
+    // for (hand of hands) hand.draw()
   }
 }
 
@@ -132,7 +129,9 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight)
   trace.width = windowWidth
   trace.height = windowHeight
-  hands[0].parent.x = width/2
+  hands[0].parent.x = width / 2
+  background(0)
+  image(trace, 0, 0)
 }
 
 const button = document.getElementById('draw')
@@ -143,6 +142,10 @@ button.onclick = () => {
   f = 1.001
   frameCount = 0
   hands = initHands(NUM)
-  if (height > width) g *= (width / height) * 1.333
+  trace && trace.remove()
+  trace = createGraphics(width, height)
+  trace.stroke(255)
+  trace.strokeWeight(3 * (width / height))
+  if (height > width) g *= (width / height)
   loop()
 }
