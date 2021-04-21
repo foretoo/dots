@@ -1,18 +1,27 @@
 let hands, trace, px, py
 const START = 61
-const END = 1334
+const END = 1447
 const NUM = 5
-const GR = 0.0333
+let g = 0.0417
 let f = 1.001
 
 class Hand extends p5.Vector {
   constructor(props) {
     super(props.x, props.y)
-    const lengthQ = Math.floor(NUM * 1.5)
-    const massQ = GR * 1000
+
+    let lengthQ, massQ
+    if (width > height) {
+      lengthQ = height
+      massQ = g * 1000
+    }
+    else {
+      lengthQ = ((height + width) - (height - width)) / 2
+      massQ = g * 1000 / (height / width)
+    }
+
     this.parent = props.parent || null
     this.child = props.child || null
-    this.length = props.length || width / (lengthQ + Math.random() * lengthQ)
+    this.length = props.length || lengthQ / (NUM + Math.random() * NUM)
     this.mass = props.mass || massQ + Math.random() * massQ
     this.angle = props.angle || Math.PI * (Math.random() - 0.5) * 2
     this.x = this.parent.x + sin(this.angle) * this.length
@@ -28,7 +37,7 @@ class Hand extends p5.Vector {
     const num3 = 2 * this.child.mass * sin(this.angle - this.child.angle)
     const num4 = (this.child.vel ** 2) * this.child.length + (this.vel ** 2) * this.length * cos(this.angle - this.child.angle)
     const num5 = this.length * (2 * this.mass + this.child.mass - this.child.mass * cos(2 * this.angle - 2 * this.child.angle))
-    const result = (-GR * num1 - GR * num2 - num3 * num4) / num5
+    const result = (-g * num1 - g * num2 - num3 * num4) / num5
     return result
   }
 
@@ -38,7 +47,7 @@ class Hand extends p5.Vector {
     const num3 = (this.parent.mass + this.mass) * cos(this.parent.angle)
     const num4 = (this.vel ** 2) * this.length * this.mass * cos(this.parent.angle - this.angle)
     const num5 = this.length * (2 * this.parent.mass + this.mass - this.mass * cos(2 * this.parent.angle - 2 * this.angle))
-    const result = (num1 * (num2 + GR * num3 + num4)) / num5
+    const result = (num1 * (num2 + g * num3 + num4)) / num5
     return result
   }
 
@@ -52,24 +61,29 @@ class Hand extends p5.Vector {
   }
 
   draw() {
-    fill(191)
+    noStroke()
+    fill(151, 255, 206)
     circle(this.x, this.y, this.mass/3)
-    stroke(191)
+    stroke(151, 255, 206, 100)
+    strokeWeight(this.mass/3)
     line(this.parent.x, this.parent.y, this.x, this.y)
   }
 }
 
 function initHands(num) {
   const hands = []
+  let handsLength = 0
   for ( let i = 0; i < num; i++ ) {
     if (i === 0) {
-      hands.push(new Hand({ parent: { x: width/2, y: height/4 } }))
+      hands.push(new Hand({ parent: { x: width/2, y: 0 } }))
     }
     else {
       hands.push(new Hand({ parent: hands[i-1] }))
       hands[i-1].child = hands[i]
     }
+    handsLength += hands[i].length
   }
+  hands[0].parent.y = (height - handsLength) / 2
   return hands
 }
 
@@ -79,38 +93,56 @@ function initHands(num) {
 function setup() {
   createCanvas(windowWidth, windowHeight)
   background(0)
-  noStroke()
+  noLoop()
   trace = createGraphics(width, height)
-  trace.background(0)
   trace.stroke(255)
-  trace.strokeWeight(7)
-  hands = initHands(NUM)
+  trace.strokeWeight(5)
 }
 
 ////////-- UPDATE --////////
 function update() {
-  f -= 0.00001
   px = hands[hands.length-1].x
   py = hands[hands.length-1].y
-  hands[0].angle += (Math.random() - 0.5) * (Math.PI / 180 * f)
   for (hand of hands) {
-    hand.length -= Math.random() / 25
+    if (frameCount < END * 0.75) hand.length -= Math.random() / 29
     hand.update()
   }
 }
 
 ////////-- DRAW --////////
 function draw() {
-  if (frameCount > START && frameCount < END) {
+  if (frameCount < START) {
+    hands && update()
+    trace.background(0)
+  }
+  else if (frameCount > END) {
+    button.disabled = false
+    noLoop()
+  }
+  else {
+    frameCount < END * 0.75 ? f -= 0.00001 : f -= 0.0001
     update()
-    image(trace, 0, 0)
-    for (hand of hands) hand.draw()
-    // hands[hands.length-1].draw()
     trace.line(hands[hands.length-1].x, hands[hands.length-1].y, px, py)
+    image(trace, 0, 0)
+    // for (hand of hands) hand.draw()
   }
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight)
+  trace.width = windowWidth
+  trace.height = windowHeight
   hands[0].parent.x = width/2
+}
+
+const button = document.getElementById('draw')
+button.onclick = () => {
+  button.innerHTML = 'Redraw'
+  button.disabled = true
+  g = 0.0417
+  f = 1.001
+  frameCount = 0
+  hands = initHands(NUM)
+  if (height > width) g *= width / height
+  loop()
 }
