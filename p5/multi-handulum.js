@@ -4,6 +4,7 @@ const END = 1387
 const NUM = 5
 let g = 0.0477
 let f = 1
+let isHandDispaly = false
 
 class Hand extends p5.Vector {
   constructor(props) {
@@ -59,6 +60,15 @@ class Hand extends p5.Vector {
     this.x = this.parent.x + sin(this.angle) * this.length
     this.y = this.parent.y + cos(this.angle) * this.length
   }
+
+  draw() {
+    fill(191)
+    noStroke()
+    circle(this.x, this.y, this.mass/3)
+    stroke("#fff3")
+    strokeWeight(this.mass/3 + 4)
+    line(this.parent.x, this.parent.y, this.x, this.y)
+  }
 }
 
 function initHands(num) {
@@ -85,8 +95,11 @@ function setup() {
   createCanvas(windowWidth, windowHeight)
   background(0)
   noLoop()
-  stroke(255)
-  strokeWeight(3 * (width / height))
+  trace = createGraphics(width, height)
+  trace.background(0)
+  trace.stroke(255)
+  trace.strokeWeight(7)
+  trace.strokeWeight(3 * (width / height))
 }
 
 ////////-- UPDATE --////////
@@ -112,23 +125,52 @@ function draw() {
   else {
     frameCount < END * 0.8 ? f -= 0.00001 : f -= 0.0001
     update()
-    line(hands[hands.length-1].x, hands[hands.length-1].y, px, py)
+    image(trace, 0, 0)
+    if (isHandDispaly) for (hand of hands) hand.draw()
+    trace.line(hands[hands.length-1].x, hands[hands.length-1].y, px, py)
   }
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight)
+  trace.width = windowWidth
+  trace.height = windowHeight
   hands[0].parent.x = width / 2
 }
 
-const button = document.getElementById('draw')
+
+const controls = document.createElement('div')
+controls.style.cssText = `
+  position: absolute;
+  padding: 20px;
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+`
+document.body.prepend(controls)
+
+const button = document.createElement('button')
+button.textContent = "Draw"
+controls.append(button)
+
+const ifHandDispaly = document.createElement("input")
+ifHandDispaly.setAttribute("type", "checkbox")
+controls.append(ifHandDispaly)
+
+
+
+
+ifHandDispaly.onchange = () => {
+  isHandDispaly = !isHandDispaly
+}
 button.onclick = () => {
-  button.innerHTML = 'Redraw'
+  button.textContent = 'Redraw'
   button.disabled = true
   g = 0.0417
   f = 1.001
   frameCount = 0
   hands = initHands(NUM)
   if (height > width) g *= width / height
+  trace.background(0)
   loop()
 }
