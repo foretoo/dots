@@ -3,8 +3,9 @@ const START = 61
 const END = 1387
 const NUM = 5
 let g = 0.0477
-let f = 1
+let f = 0.998
 let isHandDispaly = false
+const lineWidth = 13
 
 class Hand extends p5.Vector {
   constructor(props) {
@@ -94,12 +95,15 @@ function initHands(num) {
 function setup() {
   createCanvas(windowWidth, windowHeight)
   background(0)
-  noLoop()
   trace = createGraphics(width, height)
   trace.background(0)
   trace.stroke(255)
-  trace.strokeWeight(7)
-  trace.strokeWeight(3 * (width / height))
+  trace.strokeWeight(lineWidth)
+  // trace.strokeWeight(3 * (width / height))
+  // noLoop()
+  // button.disabled = true
+  hands = initHands(NUM)
+  if (height > width) g *= width / height
 }
 
 ////////-- UPDATE --////////
@@ -139,6 +143,7 @@ function windowResized() {
 }
 
 
+
 const controls = document.createElement('div')
 controls.style.cssText = `
   position: absolute;
@@ -150,7 +155,7 @@ controls.style.cssText = `
 document.body.prepend(controls)
 
 const button = document.createElement('button')
-button.textContent = "Draw"
+button.textContent = "redraw"
 controls.append(button)
 
 const ifHandDispaly = document.createElement("input")
@@ -159,13 +164,11 @@ controls.append(ifHandDispaly)
 
 
 
-
 ifHandDispaly.onchange = () => {
   isHandDispaly = !isHandDispaly
 }
 button.onclick = () => {
-  button.textContent = 'Redraw'
-  button.disabled = true
+  // button.disabled = true
   g = 0.0417
   f = 1.001
   frameCount = 0
