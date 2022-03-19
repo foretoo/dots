@@ -9,6 +9,7 @@ controls.append(redraw)
 const play = document.createElement('button')
 play.textContent = "stop"
 controls.append(play)
+play.style.width = play.offsetWidth + "px"
 
 const num = document.createElement('input')
 num.setAttribute("type", "number")

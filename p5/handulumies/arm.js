@@ -8,7 +8,7 @@ export class Arm extends p5.Vector {
     this.parent = parent || null
     this.child = child || null
     this.length = length
-    this.mass = mass || Math.random() * g * 1000
+    this.mass = mass || Math.random() * g * 5000
     this.angle = angle || Math.PI * (Math.random() - 0.5) * 2
     this.x = this.parent.x + sin(this.angle) * this.length
     this.y = this.parent.y + cos(this.angle) * this.length
