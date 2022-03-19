@@ -1,9 +1,11 @@
+import "../lib/p5.min.js"
+
 let hands, trace, px, py
 const START = 61
 const END = 1387
 const NUM = 5
+let friction = 1
 let g = 0.0477
-let f = 0.998
 let isHandDispaly = false
 const lineWidth = 13
 
@@ -56,7 +58,7 @@ class Hand extends p5.Vector {
   update() {
     this.acc = this.getAcc()
     this.vel += this.acc
-    this.vel *= f - (this.vel ** 2)
+    this.vel *= friction - (this.vel ** 2)
     this.angle += this.vel
     this.x = this.parent.x + sin(this.angle) * this.length
     this.y = this.parent.y + cos(this.angle) * this.length
@@ -92,16 +94,13 @@ function initHands(num) {
 
 
 ////////-- SETUP --////////
-function setup() {
+window.setup = function() {
   createCanvas(windowWidth, windowHeight)
   background(0)
   trace = createGraphics(width, height)
   trace.background(0)
   trace.stroke(255)
   trace.strokeWeight(lineWidth)
-  // trace.strokeWeight(3 * (width / height))
-  // noLoop()
-  // button.disabled = true
   hands = initHands(NUM)
   if (height > width) g *= width / height
 }
@@ -110,32 +109,31 @@ function setup() {
 function update() {
   px = hands[hands.length-1].x
   py = hands[hands.length-1].y
-  for (hand of hands) {
+  for (let hand of hands) {
     if (frameCount < END * 0.8) hand.length -= Math.random() / (37 * (height / width))
     hand.update()
   }
 }
 
 ////////-- DRAW --////////
-function draw() {
+window.draw = function() {
   if (frameCount < START) {
     hands && update()
     background(0)
   }
   else if (frameCount > END) {
-    button.disabled = false
     noLoop()
   }
   else {
-    frameCount < END * 0.8 ? f -= 0.00001 : f -= 0.0001
+    frameCount < END * 0.8 ? friction -= 0.00001 : friction -= 0.0001
     update()
     image(trace, 0, 0)
-    if (isHandDispaly) for (hand of hands) hand.draw()
+    if (isHandDispaly) for (let hand of hands) hand.draw()
     trace.line(hands[hands.length-1].x, hands[hands.length-1].y, px, py)
   }
 }
 
-function windowResized() {
+window.windowResized = function() {
   resizeCanvas(windowWidth, windowHeight)
   trace.width = windowWidth
   trace.height = windowHeight
@@ -166,11 +164,15 @@ controls.append(ifHandDispaly)
 
 ifHandDispaly.onchange = () => {
   isHandDispaly = !isHandDispaly
+  if (frameCount > END) {
+    background(0)
+    image(trace, 0, 0)
+    if (isHandDispaly) for (let hand of hands) hand.draw()
+  }
 }
 button.onclick = () => {
-  // button.disabled = true
-  g = 0.0417
-  f = 1.001
+  friction = 1
+  g = 0.0477
   frameCount = 0
   hands = initHands(NUM)
   if (height > width) g *= width / height
