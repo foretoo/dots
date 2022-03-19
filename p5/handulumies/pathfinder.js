@@ -50,8 +50,6 @@ checkbox.onchange = () => {
   else checkbox.removeAttribute("checked")
 }
 button.onclick = () => {
-  frameCount = 0
   hand = new Hand(arm_num, g)
   trace.background(0)
-  loop()
 }
