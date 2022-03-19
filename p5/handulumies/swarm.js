@@ -6,12 +6,12 @@ let hands = [],
     arm_num = 5,
     is_hand_display = false,
 
-    g = 0.0618,
+    g = 0.006,
 
     trace = null,
-    max_line_weight = 96,
+    max_line_weight = 128,
     min_line_weight = 8,
-    line_length = 64
+    line_length = 128
 
 
 

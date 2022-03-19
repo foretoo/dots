@@ -40,7 +40,7 @@ export class Arm extends p5.Vector {
   update() {
     this.acc = this.getAcc()
     this.vel += this.acc
-    this.vel = clamp(this.vel, -0.05, 0.05)
+    this.vel = clamp(this.vel, -0.0333, 0.0333)
     this.angle += this.vel
     this.x = this.parent.x + sin(this.angle) * this.length
     this.y = this.parent.y + cos(this.angle) * this.length
