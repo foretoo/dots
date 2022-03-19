@@ -1,27 +1,16 @@
 import "../lib/p5.min.js"
-import { Arm } from "./arm.js"
-import { arm_num, line_width } from "./const.js"
+import { Hand } from "./hand.js"
 import { button, checkbox, range } from "./gui.js"
 
-let hand,
+let hand = null,
+    arm_num = 5,
     is_hand_display = false,
-    trace,
-    trace_vel = 1
 
-function init_hand(num) {
-  const hand = []
-  let handLength = 0
-  for ( let i = 0; i < num; i++ ) {
-    if (i === 0) hand.push(new Arm({ parent: { x: width/2, y: 0 }}))
-    else {
-      hand.push(new Arm({ parent: hand[i-1] }))
-      hand[i-1].child = hand[i]
-    }
-    handLength += hand[i].length
-  }
-  hand[0].parent.y = (height - handLength) / 2
-  return hand
-}
+    g = 0.02,
+
+    trace = null,
+    trace_vel = 1,
+    line_width = 32
 
 
 
@@ -33,31 +22,25 @@ window.setup = function() {
   trace.background(0)
   trace.stroke(255)
   trace.strokeWeight(line_width)
-  hand = init_hand(arm_num)
+  hand = new Hand(arm_num, g)
 }
 
 
 
 ////////-- DRAW --////////
 window.draw = function() {
-  const { x, y } = hand.at(-1)
-  hand.forEach(hand => hand.update())
-
-  if (frameCount > 32) trace.line(hand.at(-1).x, hand.at(-1).y, x, y - trace_vel)
+  const prev = hand.point
+  hand.update()
+  const cur = hand.point
+  trace.line(cur.x, cur.y, prev.x, prev.y - trace_vel)
   trace.image(trace, 0, 0, width, height, 0, trace_vel, width, height)
   image(trace, 0, 0)
-  if (is_hand_display) for (let arm of hand) arm.draw()
+  if (is_hand_display) hand.draw()
 }
 
 
 
 ////////-- ADDITIONS --////////
-window.windowResized = function() {
-  resizeCanvas(windowWidth, windowHeight)
-  trace.width = windowWidth
-  trace.height = windowHeight
-  hand[0].parent.x = width / 2
-}
 range.oninput = (e) => {
   trace_vel = e.target.value
 }
@@ -68,7 +51,7 @@ checkbox.onchange = () => {
 }
 button.onclick = () => {
   frameCount = 0
-  hand = init_hand(arm_num)
+  hand = new Hand(arm_num, g)
   trace.background(0)
   loop()
 }
