@@ -16,6 +16,12 @@ const play = document.createElement('button')
 play.textContent = "stop"
 controls.append(play)
 
+const num = document.createElement('input')
+num.setAttribute("type", "number")
+num.setAttribute("max", "16")
+num.value = 5
+controls.append(num)
+
 const handdraw = document.createElement("input")
 handdraw.setAttribute("type", "checkbox")
 controls.append(handdraw)
@@ -30,6 +36,7 @@ controls.append(handdraw)
 export {
   redraw,
   play,
+  num,
   handdraw,
   // range,
 }

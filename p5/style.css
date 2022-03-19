@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  border: none;
   font-size: 20px;
   line-height: 1rem;
   box-sizing: border-box;
@@ -20,10 +21,8 @@ canvas {
   display: block;
 }
 button {
-  margin: 0.5rem;
   padding: 0.5rem 0.618rem;
   color: #111;
-  border: none;
   border-radius: 0.5rem;
   background: white;
   cursor: pointer;
@@ -34,4 +33,9 @@ button:disabled {
 input[type=checkbox] {
   transform: scale(1.5);
   cursor: pointer;
+}
+input[type=number] {
+  width: 4rem;
+  padding: 0.45rem 0.618rem;
+  border-radius: 0.5rem;
 }

@@ -1,10 +1,9 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import { Hand } from "./hand.js"
-import { redraw, play, handdraw } from "./gui.js"
+import { redraw, play, num, handdraw } from "./gui.js"
 
 let hands = [],
     arm_num = 4,
-    hands_num = 12,
     is_hand_display = false,
 
     g = 0.01,
@@ -16,7 +15,7 @@ let hands = [],
 
 
 
-const init_hands = () => {
+const init_hands = (hands_num) => {
   const hands = []
   for (let i = 0; i < hands_num; i++) {
     hands.push({
@@ -37,7 +36,7 @@ window.setup = function() {
   background(0)
   trace = createGraphics(width, height)
   trace.background(0)
-  hands = init_hands()
+  hands = init_hands(num.value)
 }
 
 
@@ -70,8 +69,12 @@ handdraw.onchange = () => {
   if (is_hand_display) handdraw.setAttribute("checked", null)
   else handdraw.removeAttribute("checked")
 }
+num.oninput = () => {
+  hands = init_hands(num.value)
+  trace.background(0)
+}
 redraw.onclick = () => {
-  hands = init_hands()
+  hands = init_hands(num.value)
   trace.background(0)
 }
 play.onclick = () => {
