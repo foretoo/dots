@@ -1,9 +1,10 @@
 import { clamp } from "../utils.js"
 
 export class Arm extends p5.Vector {
-  constructor({ parent, child, length, mass, angle, x, y, g }) {
+  constructor({ parent, child, length, mass, angle, x, y, g, v }) {
     super(x, y)
     this.g = g
+    this.v = v
     this.parent = parent || null
     this.child = child || null
     this.length = length
@@ -40,7 +41,7 @@ export class Arm extends p5.Vector {
   update() {
     this.acc = this.getAcc()
     this.vel += this.acc
-    this.vel = clamp(this.vel, -0.0333, 0.0333)
+    this.vel = clamp(this.vel, -this.v, this.v)
     this.angle += this.vel
     this.x = this.parent.x + sin(this.angle) * this.length
     this.y = this.parent.y + cos(this.angle) * this.length
