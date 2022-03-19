@@ -3,10 +3,10 @@ import { Hand } from "./hand.js"
 import { redraw, play, num, handdraw } from "./gui.js"
 
 let hands = [],
-    arm_num = 4,
+    arm_num = 5,
     is_hand_display = false,
 
-    g = 0.01,
+    g = 0.0618,
 
     trace = null,
     max_line_weight = 96,
@@ -17,9 +17,10 @@ let hands = [],
 
 const init_hands = (hands_num) => {
   const hands = []
+  const delta_y = (height / (hands_num + (hands_num / 2) | 0)) | 0
   for (let i = 0; i < hands_num; i++) {
     hands.push({
-      hand: new Hand(arm_num, g, i * (height / (hands_num + (hands_num / 2)))),
+      hand: new Hand(arm_num, g, i * delta_y),
       draw_arr: [],
       color: "#" + Array(3).fill().map(() => (Math.random() * 16 | 0).toString(16)).join(""),
       weight: min_line_weight + Math.random() * (max_line_weight - min_line_weight) | 0,
@@ -36,7 +37,7 @@ window.setup = function() {
   background(0)
   trace = createGraphics(width, height)
   trace.background(0)
-  hands = init_hands(num.value)
+  hands = init_hands(parseInt(num.value))
 }
 
 
@@ -70,11 +71,11 @@ handdraw.onchange = () => {
   else handdraw.removeAttribute("checked")
 }
 num.oninput = () => {
-  hands = init_hands(num.value)
+  hands = init_hands(parseInt(num.value))
   trace.background(0)
 }
 redraw.onclick = () => {
-  hands = init_hands(num.value)
+  hands = init_hands(parseInt(num.value))
   trace.background(0)
 }
 play.onclick = () => {
