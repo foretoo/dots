@@ -1,4 +1,4 @@
-import "../lib/p5.min.js"
+import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import { Hand } from "./hand.js"
 import { redraw, play, handdraw } from "./gui.js"
 
