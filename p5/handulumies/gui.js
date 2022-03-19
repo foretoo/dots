@@ -1,11 +1,5 @@
 const controls = document.createElement('div')
-controls.style.cssText = `
-  position: absolute;
-  padding: 20px;
-  display: flex;
-  align-items: baseline;
-  gap: 20px;
-`
+controls.classList.add("controls")
 document.body.prepend(controls)
 
 const redraw = document.createElement('button')
