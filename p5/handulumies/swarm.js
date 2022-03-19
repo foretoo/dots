@@ -9,6 +9,7 @@ let hands = [],
     g = 0.006,
 
     trace = null,
+    bg = "#111",
     max_line_weight = 128,
     min_line_weight = 8,
     line_length = 128
@@ -34,10 +35,11 @@ const init_hands = (hands_num) => {
 ////////-- SETUP --////////
 window.setup = function() {
   createCanvas(windowWidth, windowHeight)
-  background(0)
+  background(bg)
   trace = createGraphics(width, height)
-  trace.background(0)
+  trace.background(bg)
   trace.noFill()
+  trace.strokeJoin(ROUND);
   hands = init_hands(parseInt(num.value))
 }
 
@@ -45,7 +47,7 @@ window.setup = function() {
 
 ////////-- DRAW --////////
 window.draw = function() {
-  trace.background(0)
+  trace.background(bg)
   hands.forEach(({ hand, draw_arr, color, weight }) => {
     draw_arr.unshift(hand.point)
     if (draw_arr.length > line_length) draw_arr.pop()
