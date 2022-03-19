@@ -3,7 +3,7 @@ import { Hand } from "./hand.js"
 import { redraw, play, num, handdraw } from "./gui.js"
 
 let hands = [],
-    arm_num = 5,
+    arm_num = 4,
     is_hand_display = false,
 
     g = 0.006,
@@ -22,9 +22,20 @@ const init_hands = (hands_num) => {
   for (let i = 0; i < hands_num; i++) {
     hands.push({
       hand: new Hand(arm_num, i * delta_y, g, 0.02 + Math.random() * 0.03),
-      draw_arr: [],
+      points: [],
       color: "#" + Array(3).fill().map(() => (Math.random() * 16 | 0).toString(16)).join(""),
       weight: min_line_weight + Math.random() * (max_line_weight - min_line_weight) | 0,
+      assign: ({ x, y }) => {
+        const arr = hands[i].points
+        if (arr.length < line_length) arr.push({ x, y })
+        else {
+          for (let i = 0; i < arr.length - 1; i++) {
+            arr[i].x = arr[i + 1].x
+            arr[i].y = arr[i + 1].y
+          }
+          arr[arr.length - 1] = { x, y }
+        }
+      },
     })
   }
   return hands
@@ -48,18 +59,16 @@ window.setup = function() {
 ////////-- DRAW --////////
 window.draw = function() {
   trace.background(bg)
-  hands.forEach(({ hand, draw_arr, color, weight }) => {
-    draw_arr.unshift(hand.point)
-    if (draw_arr.length > line_length) draw_arr.pop()
+  hands.forEach(({ hand, points, color, weight, assign }) => {
+    assign(hand.point)
 
-    if (draw_arr.length > 1) {
-      trace.stroke(color)
-      trace.strokeWeight(weight)
-      trace.beginShape();
-      draw_arr.forEach(point => trace.vertex(point.x, point.y))
-      trace.endShape();
-      image(trace, 0, 0)
-    }
+    trace.stroke(color)
+    trace.strokeWeight(weight)
+    trace.beginShape();
+    points.forEach(point => trace.vertex(point.x, point.y))
+    trace.endShape();
+
+    image(trace, 0, 0)
     hand.update()
   })
   if (is_hand_display) hands.forEach(({ hand }) => hand.draw())
