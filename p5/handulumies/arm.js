@@ -1,13 +1,13 @@
 import { clamp } from "../utils.js"
-import { g, arm_num } from "./const.js"
 
 export class Arm extends p5.Vector {
-  constructor({ parent, child, length, mass, angle, x, y }) {
+  constructor({ parent, child, length, mass, angle, x, y, g }) {
     super(x, y)
+    this.g = g
     this.parent = parent || null
     this.child = child || null
-    this.length = length || height / ((Math.random() + 1.25) * arm_num)
-    this.mass = mass || g + Math.random() * g
+    this.length = length
+    this.mass = mass || Math.random() * g * 1000
     this.angle = angle || Math.PI * (Math.random() - 0.5) * 2
     this.x = this.parent.x + sin(this.angle) * this.length
     this.y = this.parent.y + cos(this.angle) * this.length
@@ -23,7 +23,7 @@ export class Arm extends p5.Vector {
     const num3 = 2 * this.child.mass * sin(this.angle - this.child.angle)
     const num4 = (this.child.vel ** 2) * this.child.length + (this.vel ** 2) * this.length * cos(this.angle - this.child.angle)
     const num5 = this.length * (2 * this.mass + this.child.mass - this.child.mass * cos(2 * this.angle - 2 * this.child.angle))
-    const result = (-g * num1 - g * num2 - num3 * num4) / num5
+    const result = (-this.g * num1 - this.g * num2 - num3 * num4) / num5
     return result
   }
 
@@ -33,7 +33,7 @@ export class Arm extends p5.Vector {
     const num3 = (this.parent.mass + this.mass) * cos(this.parent.angle)
     const num4 = (this.vel ** 2) * this.length * this.mass * cos(this.parent.angle - this.angle)
     const num5 = this.length * (2 * this.parent.mass + this.mass - this.mass * cos(2 * this.parent.angle - 2 * this.angle))
-    const result = (num1 * (num2 + g * num3 + num4)) / num5
+    const result = (num1 * (num2 + this.g * num3 + num4)) / num5
     return result
   }
 
