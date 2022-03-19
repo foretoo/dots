@@ -8,23 +8,28 @@ controls.style.cssText = `
 `
 document.body.prepend(controls)
 
-const button = document.createElement('button')
-button.textContent = "redraw"
-controls.append(button)
+const redraw = document.createElement('button')
+redraw.textContent = "redraw"
+controls.append(redraw)
 
-const checkbox = document.createElement("input")
-checkbox.setAttribute("type", "checkbox")
-controls.append(checkbox)
+const play = document.createElement('button')
+play.textContent = "stop"
+controls.append(play)
 
-const range = document.createElement("input")
-range.setAttribute("type", "range")
-range.setAttribute("min", "1")
-range.setAttribute("max", "20")
-range.setAttribute("value", "1")
-controls.append(range)
+const handdraw = document.createElement("input")
+handdraw.setAttribute("type", "checkbox")
+controls.append(handdraw)
+
+// const range = document.createElement("input")
+// range.setAttribute("type", "range")
+// range.setAttribute("min", "1")
+// range.setAttribute("max", "20")
+// range.setAttribute("value", "1")
+// controls.append(range)
 
 export {
-  button,
-  checkbox,
-  range,
+  redraw,
+  play,
+  handdraw,
+  // range,
 }
