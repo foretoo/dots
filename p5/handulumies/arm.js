@@ -1,12 +1,12 @@
 import { clamp } from "../utils.js"
-import { g, hands_num } from "./const.js"
+import { g, arm_num } from "./const.js"
 
-export class Hand extends p5.Vector {
+export class Arm extends p5.Vector {
   constructor({ parent, child, length, mass, angle, x, y }) {
     super(x, y)
     this.parent = parent || null
     this.child = child || null
-    this.length = length || height / ((Math.random() + 1.25) * hands_num)
+    this.length = length || height / ((Math.random() + 1.25) * arm_num)
     this.mass = mass || g + Math.random() * g
     this.angle = angle || Math.PI * (Math.random() - 0.5) * 2
     this.x = this.parent.x + sin(this.angle) * this.length

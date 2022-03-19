@@ -1,26 +1,26 @@
 import "../lib/p5.min.js"
-import { Hand } from "./hand.js"
-import { hands_num, line_width } from "./const.js"
+import { Arm } from "./arm.js"
+import { arm_num, line_width } from "./const.js"
 import { button, checkbox, range } from "./gui.js"
 
-let hands,
-    is_hands_display = false,
+let hand,
+    is_hand_display = false,
     trace,
     trace_vel = 1
 
-function init_hands(num) {
-  const hands = []
-  let handsLength = 0
+function init_hand(num) {
+  const hand = []
+  let handLength = 0
   for ( let i = 0; i < num; i++ ) {
-    if (i === 0) hands.push(new Hand({ parent: { x: width/2, y: 0 }}))
+    if (i === 0) hand.push(new Arm({ parent: { x: width/2, y: 0 }}))
     else {
-      hands.push(new Hand({ parent: hands[i-1] }))
-      hands[i-1].child = hands[i]
+      hand.push(new Arm({ parent: hand[i-1] }))
+      hand[i-1].child = hand[i]
     }
-    handsLength += hands[i].length
+    handLength += hand[i].length
   }
-  hands[0].parent.y = (height - handsLength) / 2
-  return hands
+  hand[0].parent.y = (height - handLength) / 2
+  return hand
 }
 
 
@@ -33,20 +33,20 @@ window.setup = function() {
   trace.background(0)
   trace.stroke(255)
   trace.strokeWeight(line_width)
-  hands = init_hands(hands_num)
+  hand = init_hand(arm_num)
 }
 
 
 
 ////////-- DRAW --////////
 window.draw = function() {
-  const { x, y } = hands.at(-1)
-  hands.forEach(hand => hand.update())
-  if (is_hands_display) for (let hand of hands) hand.draw()
+  const { x, y } = hand.at(-1)
+  hand.forEach(hand => hand.update())
 
-  if (frameCount > 32) trace.line(hands.at(-1).x, hands.at(-1).y, x, y - trace_vel)
+  if (frameCount > 32) trace.line(hand.at(-1).x, hand.at(-1).y, x, y - trace_vel)
   trace.image(trace, 0, 0, width, height, 0, trace_vel, width, height)
   image(trace, 0, 0)
+  if (is_hand_display) for (let arm of hand) arm.draw()
 }
 
 
@@ -56,19 +56,19 @@ window.windowResized = function() {
   resizeCanvas(windowWidth, windowHeight)
   trace.width = windowWidth
   trace.height = windowHeight
-  hands[0].parent.x = width / 2
+  hand[0].parent.x = width / 2
 }
 range.oninput = (e) => {
   trace_vel = e.target.value
 }
 checkbox.onchange = () => {
-  is_hands_display = !is_hands_display
-  if (is_hands_display) checkbox.setAttribute("checked", null)
+  is_hand_display = !is_hand_display
+  if (is_hand_display) checkbox.setAttribute("checked", null)
   else checkbox.removeAttribute("checked")
 }
 button.onclick = () => {
   frameCount = 0
-  hands = init_hands(hands_num)
+  hand = init_hand(arm_num)
   trace.background(0)
   loop()
 }
