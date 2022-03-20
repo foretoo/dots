@@ -20,17 +20,17 @@ const handdraw = document.createElement("input")
 handdraw.setAttribute("type", "checkbox")
 controls.append(handdraw)
 
-// const range = document.createElement("input")
-// range.setAttribute("type", "range")
-// range.setAttribute("min", "1")
-// range.setAttribute("max", "20")
-// range.setAttribute("value", "1")
-// controls.append(range)
+const range = document.createElement("input")
+range.setAttribute("type", "range")
+range.setAttribute("min", "1")
+range.setAttribute("max", "20")
+range.setAttribute("value", "1")
+controls.append(range)
 
 export {
   redraw,
   play,
   num,
   handdraw,
-  // range,
+  range,
 }
