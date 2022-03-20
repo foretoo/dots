@@ -9,7 +9,6 @@ let hands = [],
 
     g = 0.006,
 
-    trace = null,
     bg = "#eee",
     max_weight = 128,
     min_weight = 8,
@@ -51,11 +50,9 @@ const init_hands = (hands_num) => {
 window.setup = function() {
   createCanvas(windowWidth, windowHeight)
   background(bg)
-  trace = createGraphics(width, height)
-  trace.background(bg)
-  trace.noFill()
-  trace.strokeCap(PROJECT)
-  trace.strokeJoin(ROUND)
+  noFill()
+  strokeCap(PROJECT)
+  strokeJoin(ROUND)
   hands = init_hands(parseInt(num.value))
 }
 
@@ -63,18 +60,20 @@ window.setup = function() {
 
 ////////-- DRAW --////////
 window.draw = function() {
-  trace.background(bg)
+  noFill()
+  strokeCap(PROJECT)
+  strokeJoin(ROUND)
+  background(bg)
 
   hands.forEach(({ hand, points, color, weight, assign }) => {
     assign(hand.point)
 
-    trace.stroke(color)
-    trace.strokeWeight(weight)
-    trace.beginShape()
-    points.forEach(point => trace.vertex(point.x, point.y))
-    trace.endShape()
+    stroke(color)
+    strokeWeight(weight)
+    beginShape()
+    points.forEach(point => vertex(point.x, point.y))
+    endShape()
 
-    image(trace, 0, 0)
     hand.update()
   })
 
@@ -92,11 +91,11 @@ handdraw.onchange = () => {
 num.oninput = () => {
   num.value = clamp(num.value, 1, 48)
   hands = init_hands(parseInt(num.value))
-  trace.background(0)
+  background(0)
 }
 redraw.onclick = () => {
   hands = init_hands(parseInt(num.value))
-  trace.background(0)
+  background(0)
 }
 play.onclick = () => {
   if (isLooping()) {

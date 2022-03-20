@@ -51,8 +51,9 @@ export class Arm extends p5.Vector {
     fill(191)
     noStroke()
     circle(this.x, this.y, this.mass/3)
-    stroke("#fff3")
+    strokeCap(ROUND)
     strokeWeight(this.mass/3 + 4)
+    stroke("#fff3")
     line(this.parent.x, this.parent.y, this.x, this.y)
   }
 }
