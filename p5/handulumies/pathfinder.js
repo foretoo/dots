@@ -1,6 +1,6 @@
 import "../lib/p5.min.js"
 import { Hand } from "./hand.js"
-import { button, checkbox, range } from "./gui.js"
+import { redraw, play, num, handdraw, range } from "./gui.js"
 
 let hand = null,
     arm_num = 5,
@@ -22,7 +22,7 @@ window.setup = function() {
   trace.background(0)
   trace.stroke(255)
   trace.strokeWeight(line_width)
-  hand = new Hand(arm_num, g)
+  hand = new Hand(arm_num, height / arm_num, g, 0.04)
 }
 
 
@@ -41,15 +41,26 @@ window.draw = function() {
 
 
 ////////-- ADDITIONS --////////
-range.oninput = (e) => {
-  trace_vel = e.target.value
+num.remove()
+range.oninput = () => {
+  trace_vel = range.value
 }
-checkbox.onchange = () => {
+handdraw.onchange = () => {
   is_hand_display = !is_hand_display
-  if (is_hand_display) checkbox.setAttribute("checked", null)
-  else checkbox.removeAttribute("checked")
+  if (is_hand_display) handdraw.setAttribute("checked", null)
+  else handdraw.removeAttribute("checked")
 }
-button.onclick = () => {
-  hand = new Hand(arm_num, g)
+redraw.onclick = () => {
+  hand = new Hand(arm_num, height / arm_num, g, 0.04)
   trace.background(0)
+}
+play.onclick = () => {
+  if (isLooping()) {
+    play.textContent = "play"
+    noLoop()
+  }
+  else {
+    play.textContent = "stop"
+    loop()
+  }
 }
