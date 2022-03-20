@@ -46,9 +46,8 @@ window.setup = function() {
   createCanvas(windowWidth, windowHeight)
   background(bg)
   noFill()
+  strokeJoin(ROUND)
   // colorMode(HSB)
-  // strokeCap(PROJECT)
-  // strokeJoin(ROUND)
   hands = init_hands(parseInt(num.value))
 }
 
@@ -58,7 +57,6 @@ window.setup = function() {
 window.draw = function() {
   noFill()
   strokeCap(PROJECT)
-  strokeJoin(ROUND)
   background(bg)
 
   // const shift = noise(noise_offset)
