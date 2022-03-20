@@ -1,7 +1,7 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import { Hand } from "./hand.js"
 import { redraw, play, num, handdraw } from "./gui.js"
-import { clamp, random, random_hex } from "../utils.js"
+import { clamp, random, random_hex, assign } from "../utils.js"
 
 let hands = [],
     arm_num = 4,
@@ -12,7 +12,8 @@ let hands = [],
     bg = "#eee",
     max_weight = 128,
     min_weight = 8,
-    line_length = 128
+    line_length = 128,
+    noise_offset = 0.000
 
 
 
@@ -24,20 +25,14 @@ const init_hands = (hands_num) => {
 
       hand: new Hand(arm_num, i * delta_y, g, random(0.02, 0.05)),
       points: [],
-      color: "#" + random_hex(3),
-      weight: random(min_weight, max_weight) | 0,
-
-      assign: ({ x, y }) => {
-        const arr = hands[i].points
-        if (arr.length < line_length) arr.push({ x, y })
-        else {
-          for (let i = 0; i < arr.length - 1; i++) {
-            arr[i].x = arr[i + 1].x
-            arr[i].y = arr[i + 1].y
-          }
-          arr[arr.length - 1] = { x, y }
-        }
+      color: {
+        hex: "#" + random_hex(3),
+        h: random(0, 360)  | 0,
+        s: random(25, 100) | 0,
+        b: random(25, 100) | 0,
+        hues: [],
       },
+      weight: random(min_weight, max_weight) | 0,
 
     })
   }
@@ -51,8 +46,9 @@ window.setup = function() {
   createCanvas(windowWidth, windowHeight)
   background(bg)
   noFill()
-  strokeCap(PROJECT)
-  strokeJoin(ROUND)
+  colorMode(HSB)
+  // strokeCap(PROJECT)
+  // strokeJoin(ROUND)
   hands = init_hands(parseInt(num.value))
 }
 
@@ -60,22 +56,24 @@ window.setup = function() {
 
 ////////-- DRAW --////////
 window.draw = function() {
-  noFill()
-  strokeCap(PROJECT)
-  strokeJoin(ROUND)
+  // noFill()
+  // strokeCap(ROUND)
+  // strokeJoin(ROUND)
   background(bg)
 
-  hands.forEach(({ hand, points, color, weight, assign }) => {
-    assign(hand.point)
-
-    stroke(color)
+  const shift = noise(noise_offset)
+  hands.forEach(({ hand, points, color, weight }) => {
     strokeWeight(weight)
-    beginShape()
-    points.forEach(point => vertex(point.x, point.y))
-    endShape()
-
+    const hue = (color.h + shift * 360 | 0) % 360
+    assign(hand.point, points, line_length)
+    assign(hue, color.hues, line_length)
+    for (let i = 0; i < points.length - 1; i++) {
+      stroke(color.hues[i], color.s, color.b)
+      line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
+    }
     hand.update()
   })
+  noise_offset += 0.003
 
   if (is_hand_display) hands.forEach(({ hand }) => hand.draw())
 }
