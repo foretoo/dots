@@ -70,9 +70,9 @@ window.draw = function() {
 
     trace.stroke(color)
     trace.strokeWeight(weight)
-    trace.beginShape();
+    trace.beginShape()
     points.forEach(point => trace.vertex(point.x, point.y))
-    trace.endShape();
+    trace.endShape()
 
     image(trace, 0, 0)
     hand.update()

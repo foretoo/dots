@@ -33,7 +33,7 @@ export class Hand {
   }
 
   get anchor() {
-    const point = this.arms.at(0).parent
+    const point = this.arms[0].parent
     return {
       get x() { return point.x },
       get y() { return point.y },
