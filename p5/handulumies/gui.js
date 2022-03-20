@@ -13,8 +13,7 @@ play.style.width = play.offsetWidth + "px"
 
 const num = document.createElement('input')
 num.setAttribute("type", "number")
-num.setAttribute("max", "16")
-num.value = 5
+num.value = 9
 controls.append(num)
 
 const handdraw = document.createElement("input")

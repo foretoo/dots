@@ -31,6 +31,7 @@ canvas {
 }
 .controls * {
   font-size: inherit;
+  box-shadow: 0 0.1rem 0.4rem #0001;
 }
 button {
   height: 2rem;

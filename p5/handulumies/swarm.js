@@ -1,6 +1,7 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import { Hand } from "./hand.js"
 import { redraw, play, num, handdraw } from "./gui.js"
+import { clamp, random, random_hex } from "../utils.js"
 
 let hands = [],
     arm_num = 4,
@@ -9,22 +10,24 @@ let hands = [],
     g = 0.006,
 
     trace = null,
-    bg = "#111",
-    max_line_weight = 128,
-    min_line_weight = 8,
+    bg = "#eee",
+    max_weight = 128,
+    min_weight = 8,
     line_length = 128
 
 
 
 const init_hands = (hands_num) => {
   const hands = []
-  const delta_y = (height / (hands_num + (hands_num / 2) | 0)) | 0
+  const delta_y = height / (hands_num + hands_num / 2) | 0
   for (let i = 0; i < hands_num; i++) {
     hands.push({
-      hand: new Hand(arm_num, i * delta_y, g, 0.02 + Math.random() * 0.03),
+
+      hand: new Hand(arm_num, i * delta_y, g, random(0.02, 0.05)),
       points: [],
-      color: "#" + Array(3).fill().map(() => (Math.random() * 16 | 0).toString(16)).join(""),
-      weight: min_line_weight + Math.random() * (max_line_weight - min_line_weight) | 0,
+      color: "#" + random_hex(3),
+      weight: random(min_weight, max_weight) | 0,
+
       assign: ({ x, y }) => {
         const arr = hands[i].points
         if (arr.length < line_length) arr.push({ x, y })
@@ -36,6 +39,7 @@ const init_hands = (hands_num) => {
           arr[arr.length - 1] = { x, y }
         }
       },
+
     })
   }
   return hands
@@ -50,7 +54,8 @@ window.setup = function() {
   trace = createGraphics(width, height)
   trace.background(bg)
   trace.noFill()
-  trace.strokeJoin(ROUND);
+  trace.strokeCap(PROJECT)
+  trace.strokeJoin(ROUND)
   hands = init_hands(parseInt(num.value))
 }
 
@@ -59,6 +64,7 @@ window.setup = function() {
 ////////-- DRAW --////////
 window.draw = function() {
   trace.background(bg)
+
   hands.forEach(({ hand, points, color, weight, assign }) => {
     assign(hand.point)
 
@@ -71,6 +77,7 @@ window.draw = function() {
     image(trace, 0, 0)
     hand.update()
   })
+
   if (is_hand_display) hands.forEach(({ hand }) => hand.draw())
 }
 
@@ -83,6 +90,7 @@ handdraw.onchange = () => {
   else handdraw.removeAttribute("checked")
 }
 num.oninput = () => {
+  num.value = clamp(num.value, 1, 48)
   hands = init_hands(parseInt(num.value))
   trace.background(0)
 }
@@ -91,12 +99,12 @@ redraw.onclick = () => {
   trace.background(0)
 }
 play.onclick = () => {
-  if (window.isLooping()) {
+  if (isLooping()) {
     play.textContent = "play"
-    window.noLoop()
+    noLoop()
   }
   else {
     play.textContent = "stop"
-    window.loop()
+    loop()
   }
 }
