@@ -5,7 +5,7 @@ import { clamp, random, random_hex, assign } from "../utils.js"
 
 let hands = [],
     arm_num = 4,
-    is_hand_display = false,
+    // is_hand_display = false,
 
     g = 0.006,
 
@@ -77,18 +77,19 @@ window.draw = function() {
   })
   // noise_offset += 0.003
 
-  if (is_hand_display) hands.forEach(({ hand }) => hand.draw())
+  // if (is_hand_display) hands.forEach(({ hand }) => hand.draw())
 }
 
 
 
 ////////-- ADDITIONS --////////
 range.remove()
-handdraw.onchange = () => {
-  is_hand_display = !is_hand_display
-  if (is_hand_display) handdraw.setAttribute("checked", null)
-  else handdraw.removeAttribute("checked")
-}
+handdraw.remove()
+// handdraw.onchange = () => {
+//   is_hand_display = !is_hand_display
+//   if (is_hand_display) handdraw.setAttribute("checked", null)
+//   else handdraw.removeAttribute("checked")
+// }
 num.oninput = () => {
   num.value = clamp(num.value, 1, 48)
   hands = init_hands(parseInt(num.value))
