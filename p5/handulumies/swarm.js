@@ -1,6 +1,6 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import { Hand } from "./hand.js"
-import { redraw, play, num, handdraw, range } from "./gui.js"
+import { getGUI } from "./gui.js"
 import { clamp, random, random_hex, assign } from "../utils.js"
 
 let hands = [],
@@ -83,8 +83,7 @@ window.draw = function() {
 
 
 ////////-- ADDITIONS --////////
-range.remove()
-handdraw.remove()
+const { num, reset, play } = getGUI("num", "reset", "play")
 // handdraw.onchange = () => {
 //   is_hand_display = !is_hand_display
 //   if (is_hand_display) handdraw.setAttribute("checked", null)
@@ -95,7 +94,7 @@ num.oninput = () => {
   hands = init_hands(parseInt(num.value))
   background(0)
 }
-redraw.onclick = () => {
+reset.onclick = () => {
   hands = init_hands(parseInt(num.value))
   background(0)
 }

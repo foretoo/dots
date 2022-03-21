@@ -1,6 +1,6 @@
 import "../lib/p5.min.js"
 import { Hand } from "./hand.js"
-import { redraw, play, num, handdraw, range } from "./gui.js"
+import { getGUI } from "./gui.js"
 
 let hand = null,
     arm_num = 5,
@@ -41,7 +41,7 @@ window.draw = function() {
 
 
 ////////-- ADDITIONS --////////
-num.remove()
+const { reset, play, handdraw, range } = getGUI("reset", "play", "handdraw", "range")
 range.oninput = () => {
   trace_vel = range.value
 }
@@ -50,7 +50,7 @@ handdraw.onchange = () => {
   if (is_hand_display) handdraw.setAttribute("checked", null)
   else handdraw.removeAttribute("checked")
 }
-redraw.onclick = () => {
+reset.onclick = () => {
   hand = new Hand(arm_num, height / arm_num, g, 0.04)
   trace.background(0)
 }

@@ -1,36 +1,46 @@
 const controls = document.createElement('div')
 controls.classList.add("controls")
-document.body.prepend(controls)
 
-const redraw = document.createElement('button')
-redraw.textContent = "redraw"
-controls.append(redraw)
+const reset = document.createElement('button')
+reset.textContent = "reset"
 
 const play = document.createElement('button')
 play.textContent = "stop"
-controls.append(play)
-play.style.width = play.offsetWidth + "px"
 
 const num = document.createElement('input')
 num.setAttribute("type", "number")
 num.value = 9
-controls.append(num)
 
 const handdraw = document.createElement("input")
 handdraw.setAttribute("type", "checkbox")
-controls.append(handdraw)
 
 const range = document.createElement("input")
 range.setAttribute("type", "range")
 range.setAttribute("min", "1")
 range.setAttribute("max", "20")
 range.setAttribute("value", "1")
-controls.append(range)
+
+const guis = {
+  reset, play, num, handdraw, range
+}
+
+const getGUI = (...handlers) => {
+  document.body.prepend(controls)
+  const output = {}
+  for (const name of handlers) {
+    output[name] = guis[name]
+    controls.append(guis[name])
+    if (name === "play")
+      guis[name].style.width = guis[name].offsetWidth + "px"
+  }
+  return output
+}
 
 export {
-  redraw,
+  reset,
   play,
   num,
   handdraw,
   range,
+  getGUI,
 }
