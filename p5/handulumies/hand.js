@@ -1,7 +1,7 @@
 import { Arm } from "./arm.js"
 
 export class Hand {
-  constructor(num, anchor_y, g, v) {
+  constructor(num, anchor, g, v) {
     this.arms = []
     this.arms_length = []
     this.hand_length = 0
@@ -16,7 +16,7 @@ export class Hand {
       if (i === 0)
         this.arms.push(new Arm({
           length: this.arms_length[i],
-          parent: { x: width / 2, y: anchor_y },
+          parent: anchor,
           g,
           v,
         }))
