@@ -116,4 +116,5 @@ play.onclick = toggle_play
 document.addEventListener("keyup", (e) => {
   e.preventDefault()
   e.code === "Space" && toggle_play()
+  e.code === "Enter" && handle_reset()
 })
