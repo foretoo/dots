@@ -7,9 +7,9 @@ reset.textContent = "reset"
 const play = document.createElement('button')
 play.textContent = "stop"
 
-const num = document.createElement('input')
-num.setAttribute("type", "number")
-num.value = 9
+const handnum = document.createElement('input')
+handnum.setAttribute("type", "number")
+handnum.value = 9
 
 const handdraw = document.createElement("input")
 handdraw.setAttribute("type", "checkbox")
@@ -21,7 +21,7 @@ range.setAttribute("max", "20")
 range.setAttribute("value", "1")
 
 const guis = {
-  reset, play, num, handdraw, range
+  reset, play, handnum, handdraw, range
 }
 
 const getGUI = (...handlers) => {
@@ -37,10 +37,5 @@ const getGUI = (...handlers) => {
 }
 
 export {
-  reset,
-  play,
-  num,
-  handdraw,
-  range,
   getGUI,
 }
