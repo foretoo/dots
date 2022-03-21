@@ -83,7 +83,7 @@ window.draw = function() {
 
 
 ////////-- ADDITIONS --////////
-const { num, reset, play } = getGUI("num", "reset", "play")
+const { reset, play, num } = getGUI("reset", "play", "num")
 // handdraw.onchange = () => {
 //   is_hand_display = !is_hand_display
 //   if (is_hand_display) handdraw.setAttribute("checked", null)
