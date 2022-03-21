@@ -16,18 +16,18 @@ export class Hand {
       if (i === 0)
         this.arms.push(new Arm({
           length: this.arms_length[i],
-          parent: { x: width/2, y: anchor_y/*(height - this.hand_length) / 2*/ },
+          parent: { x: width / 2, y: anchor_y },
           g,
           v,
         }))
       else {
         this.arms.push(new Arm({
           length: this.arms_length[i],
-          parent: this.arms[i-1],
+          parent: this.arms[i - 1],
           g,
           v,
         }))
-        this.arms[i-1].child = this.arms[i]
+        this.arms[i - 1].child = this.arms[i]
       }
     }
   }
@@ -43,7 +43,7 @@ export class Hand {
   }
 
   get point() {
-    const { x, y } = this.arms.at(-1)
+    const { x, y } = this.arms[this.arms.length - 1]
     return { x, y }
   }
 
