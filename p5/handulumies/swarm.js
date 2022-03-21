@@ -19,7 +19,7 @@ let hands = [],
 
 const init_hands = (hands_num) => {
   const hands = []
-  const delta_y = height / (hands_num + hands_num / 2) | 0
+  const delta_y = height / (hands_num * 1.5) | 0
   for (let i = 0; i < hands_num; i++) {
     hands.push({
 
@@ -96,7 +96,11 @@ num.oninput = () => {
 }
 reset.onclick = () => {
   hands = init_hands(parseInt(num.value))
-  background(0)
+  background(bg)
+  if (!isLooping()) {
+    play.textContent = "stop"
+    loop()
+  }
 }
 play.onclick = () => {
   if (isLooping()) {
