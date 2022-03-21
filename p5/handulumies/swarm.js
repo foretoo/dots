@@ -84,29 +84,7 @@ window.draw = function() {
 
 ////////-- ADDITIONS --////////
 const { reset, play, handnum } = getGUI("reset", "play", "handnum")
-// handdraw.onchange = () => {
-//   is_hand_display = !is_hand_display
-//   if (is_hand_display) handdraw.setAttribute("checked", null)
-//   else handdraw.removeAttribute("checked")
-// }
-handnum.oninput = () => {
-  handnum.value = clamp(handnum.value, 1, 48)
-  hands = init_hands(parseInt(handnum.value))
-  background(bg)
-  if (!isLooping()) {
-    play.textContent = "stop"
-    loop()
-  }
-}
-reset.onclick = () => {
-  hands = init_hands(parseInt(handnum.value))
-  background(bg)
-  if (!isLooping()) {
-    play.textContent = "stop"
-    loop()
-  }
-}
-play.onclick = () => {
+const toggle_play = () => {
   if (isLooping()) {
     play.textContent = "play"
     noLoop()
@@ -116,15 +94,26 @@ play.onclick = () => {
     loop()
   }
 }
-
-document.addEventListener("keyup", ({ code }) => {
-  if (code === "Space")
-    if (isLooping()) {
-      play.textContent = "play"
-      noLoop()
-    }
-    else {
-      play.textContent = "stop"
-      loop()
-    }
+const handle_reset = () => {
+  hands = init_hands(parseInt(handnum.value))
+  background(bg)
+  if (!isLooping()) {
+    play.textContent = "stop"
+    loop()
+  }
+}
+// handdraw.onchange = () => {
+//   is_hand_display = !is_hand_display
+//   if (is_hand_display) handdraw.setAttribute("checked", null)
+//   else handdraw.removeAttribute("checked")
+// }
+handnum.oninput = () => {
+  handnum.value = clamp(parseInt(handnum.value), 1, 48)
+  handle_reset()
+}
+reset.onclick = handle_reset
+play.onclick = toggle_play
+document.addEventListener("keyup", (e) => {
+  e.preventDefault()
+  e.code === "Space" && toggle_play()
 })
