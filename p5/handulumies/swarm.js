@@ -48,7 +48,7 @@ window.setup = function() {
   noFill()
   strokeJoin(ROUND)
   // colorMode(HSB)
-  hands = init_hands(parseInt(num.value))
+  hands = init_hands(parseInt(handnum.value))
 }
 
 
@@ -83,19 +83,23 @@ window.draw = function() {
 
 
 ////////-- ADDITIONS --////////
-const { reset, play, num } = getGUI("reset", "play", "num")
+const { reset, play, handnum } = getGUI("reset", "play", "handnum")
 // handdraw.onchange = () => {
 //   is_hand_display = !is_hand_display
 //   if (is_hand_display) handdraw.setAttribute("checked", null)
 //   else handdraw.removeAttribute("checked")
 // }
-num.oninput = () => {
-  num.value = clamp(num.value, 1, 48)
-  hands = init_hands(parseInt(num.value))
-  background(0)
+handnum.oninput = () => {
+  handnum.value = clamp(handnum.value, 1, 48)
+  hands = init_hands(parseInt(handnum.value))
+  background(bg)
+  if (!isLooping()) {
+    play.textContent = "stop"
+    loop()
+  }
 }
 reset.onclick = () => {
-  hands = init_hands(parseInt(num.value))
+  hands = init_hands(parseInt(handnum.value))
   background(bg)
   if (!isLooping()) {
     play.textContent = "stop"
@@ -112,3 +116,15 @@ play.onclick = () => {
     loop()
   }
 }
+
+document.addEventListener("keyup", ({ code }) => {
+  if (code === "Space")
+    if (isLooping()) {
+      play.textContent = "play"
+      noLoop()
+    }
+    else {
+      play.textContent = "stop"
+      loop()
+    }
+})
