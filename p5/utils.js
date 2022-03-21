@@ -15,6 +15,10 @@ export const random = (min, max) => (
   min + Math.random() * (max - min)
 )
 
+export const isFocused = (...elements) => (
+  elements.some(element => document.activeElement === element)
+)
+
 export const isObject = (obj) => (
   Object.prototype.toString.call(obj) === "[object Object]"
 )
