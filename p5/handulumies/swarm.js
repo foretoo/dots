@@ -1,25 +1,24 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import { Hand } from "./hand.js"
-import { getGUI } from "./gui.js"
-import { clamp, random, random_hex, assign, isFocused } from "../utils.js"
+import { getGUI, stats } from "./gui.js"
+import { clamp, random, random_hex, assign_obj, assign_val, isFocused } from "../utils.js"
 
 let hands = [],
     arm_num = 4,
-    // is_hand_display = false,
 
     g = 0.006,
 
     bg = "#eee",
-    max_weight = 192,
-    min_weight = 12,
+    max_weight = 256,
+    min_weight = 64,
     line_length = 128
 
 
 
 const init_hands = (hands_num) => {
   const hands = []
-  const delta_y = height / (hands_num * 1.5) | 0
-  const delta_x = width > height ? (width - height) / (hands_num * 1.5) | 0 : 0
+  const delta_y = height / (hands_num * 1.5)
+  const delta_x = width > height ? (width - height) / (hands_num * 1.5) : 0
   const delta_w = Math.sqrt(width * height) / 1000
   for (let i = 0; i < hands_num; i++) {
     hands.push({
@@ -36,12 +35,12 @@ const init_hands = (hands_num) => {
       points: [],
       color: {
         hex: "#" + random_hex(3),
-        // h: random(0, 360)  | 0,
-        // s: random(25, 100) | 0,
-        // b: random(25, 100) | 0,
+        h: random(0, 360),
+        s: random(20, 100),
+        b: random(20, 100),
         // hues: [],
       },
-      weight: random(min_weight, max_weight) * delta_w | 0,
+      weight: random(min_weight, max_weight) * delta_w,
 
     })
   }
@@ -56,7 +55,8 @@ window.setup = function() {
   background(bg)
   noFill()
   strokeJoin(ROUND)
-  // colorMode(HSB)
+  colorMode(HSB)
+
   hands = init_hands(parseInt(handnum.value))
 }
 window.windowResized = function() {
@@ -67,29 +67,32 @@ window.windowResized = function() {
 
 ////////-- DRAW --////////
 window.draw = function() {
-  noFill()
-  strokeCap(PROJECT)
+  stats.begin()
   background(bg)
 
-  // const shift = noise(noise_offset)
-  hands.forEach(({ hand, points, color, weight }) => {
-    assign(hand.point, points, line_length)
+  const shift = sin(frameCount * 0.001)
+  hands.forEach(({ hand, points, color, weight }, i) => {
     strokeWeight(weight)
-    // const hue = (color.h + shift * 360 | 0) % 360
-    // assign(hue, color.hues, line_length)
+    assign_obj(hand.point, points, line_length)
+
+    const sign = i % 2 == 0 ? 1 : -1
+    const hue = (color.h + shift * sign * 180) % 360
+    // assign_val(hue, color.hues, line_length)
     // for (let i = 0; i < points.length - 1; i++) {
     //   stroke(color.hues[i], color.s, color.b)
     //   line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
     // }
-    stroke(color.hex)
+
+    stroke(hue, color.s, color.b)
     beginShape()
     points.forEach(point => vertex(point.x, point.y))
     endShape()
+
     hand.update()
   })
-  // noise_offset += 0.003
 
-  // if (is_hand_display) hands.forEach(({ hand }) => hand.draw())
+  // if (handdraw.checked) hands.forEach(({ hand }) => hand.draw())
+  stats.end()
 }
 
 
@@ -115,9 +118,8 @@ const handle_reset = () => {
   }
 }
 // handdraw.onchange = () => {
-//   is_hand_display = !is_hand_display
-//   if (is_hand_display) handdraw.setAttribute("checked", null)
-//   else handdraw.removeAttribute("checked")
+//   if (handdraw.checked) handdraw.removeAttribute("checked")
+//   else handdraw.setAttribute("checked", null)
 // }
 handnum.oninput = () => {
   handnum.value = clamp(parseInt(handnum.value), 1, 48)
