@@ -1,3 +1,7 @@
+const stats = new Stats()
+const stats_container = document.querySelector("#stats")
+stats_container.prepend(stats.domElement)
+
 const controls = document.createElement('div')
 controls.classList.add("controls")
 
@@ -9,10 +13,11 @@ play.textContent = "stop"
 
 const handnum = document.createElement('input')
 handnum.setAttribute("type", "number")
-handnum.value = 9
+handnum.value = 1
 
 const handdraw = document.createElement("input")
 handdraw.setAttribute("type", "checkbox")
+handdraw.setAttribute("checked", null)
 
 const range = document.createElement("input")
 range.setAttribute("type", "range")
@@ -38,4 +43,5 @@ const getGUI = (...handlers) => {
 
 export {
   getGUI,
+  stats,
 }
