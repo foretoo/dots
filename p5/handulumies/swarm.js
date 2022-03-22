@@ -1,14 +1,13 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import { Hand } from "./hand.js"
 import { getGUI, stats } from "./gui.js"
-import { clamp, random, random_hex, assign_obj, assign_val, isFocused } from "../utils.js"
+import { clamp, random, assign_obj, assign_val, isFocused } from "../utils.js"
 
 let hands = [],
     arm_num = 4,
 
     g = 0.006,
 
-    bg = "#eee",
     max_weight = 256,
     min_weight = 64,
     line_length = 128
@@ -34,7 +33,6 @@ const init_hands = (hands_num) => {
       ),
       points: [],
       color: {
-        hex: "#" + random_hex(3),
         h: random(0, 360),
         s: random(20, 100),
         b: random(20, 100),
@@ -52,7 +50,6 @@ const init_hands = (hands_num) => {
 ////////-- SETUP --////////
 window.setup = function() {
   createCanvas(windowWidth, windowHeight)
-  background(bg)
   noFill()
   strokeJoin(ROUND)
   colorMode(HSB)
@@ -68,7 +65,7 @@ window.windowResized = function() {
 ////////-- DRAW --////////
 window.draw = function() {
   stats.begin()
-  background(bg)
+  drawingContext.clearRect(0, 0, width, height);
 
   const shift = sin(frameCount * 0.001)
   hands.forEach(({ hand, points, color, weight }, i) => {
@@ -111,7 +108,7 @@ const toggle_play = () => {
 }
 const handle_reset = () => {
   hands = init_hands(parseInt(handnum.value))
-  background(bg)
+  drawingContext.clearRect(0, 0, width, height);
   if (!isLooping()) {
     play.textContent = "stop"
     loop()
