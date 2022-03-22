@@ -33,17 +33,22 @@ export const isObject = (obj) => (
   Object.prototype.toString.call(obj) === "[object Object]"
 )
 
-export const assign = (value, arr, length) => {
-  const isObj = isObject(value)
+export const assign_val = (value, arr, length) => {
   if (arr.length < length) arr.push(value)
   else {
     for (let i = 0; i < arr.length - 1; i++) {
-      if (isObj)
-        for (let k in arr[i])
-          arr[i][k] = arr[i + 1][k]
-      else
-        arr[i] = arr[i + 1]
+      arr[i] = arr[i + 1]
     }
     arr[length - 1] = value
+  }
+}
+export const assign_obj = (obj, arr, length) => {
+  if (arr.length < length) arr.push(obj)
+  else {
+    for (let i = 0; i < arr.length - 1; i++) {
+      for (let k in arr[i])
+        arr[i][k] = arr[i + 1][k]
+    }
+    arr[length - 1] = obj
   }
 }
