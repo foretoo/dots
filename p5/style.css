@@ -13,6 +13,7 @@ html, body {
 }
 body {
   display: flex;
+  background: #eee;
 }
 main {
   margin: auto;
@@ -63,11 +64,9 @@ input[type=number] {
   border-radius: 0.5rem;
 }
 
-/* .p5Canvas {
-  -webkit-filter: url("#goo");
-	filter: url("#goo");
+.p5Canvas {
   z-index: -1;
-} */
+}
 #stats{
   position:absolute;
   top:0;
