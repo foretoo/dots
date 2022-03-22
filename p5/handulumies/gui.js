@@ -13,11 +13,11 @@ play.textContent = "stop"
 
 const handnum = document.createElement('input')
 handnum.setAttribute("type", "number")
-handnum.value = 1
+handnum.value = 9
 
 const handdraw = document.createElement("input")
 handdraw.setAttribute("type", "checkbox")
-handdraw.setAttribute("checked", null)
+// handdraw.setAttribute("checked", null)
 
 const range = document.createElement("input")
 range.setAttribute("type", "range")
