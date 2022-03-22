@@ -28,5 +28,6 @@ export class Arm_sim extends p5.Vector {
     strokeWeight(24)
     stroke("#fff3")
     line(this.parent.x, this.parent.y, this.x, this.y)
+    noFill()
   }
 }
