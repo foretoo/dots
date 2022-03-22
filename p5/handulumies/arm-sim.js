@@ -9,7 +9,7 @@ export class Arm_sim extends p5.Vector {
     this.angle = angle
     this.x = this.parent.x + sin(angle) * length
     this.y = this.parent.y + cos(angle) * length
-    this.angle_f = random(0.005, 0.015) * (random(-1, 1) > 0 ? 1 : -1)
+    this.angle_f = random(0.005, 0.01) * (random(-1, 1) > 0 ? 1 : -1)
     this.angle_f_f = random(0, Math.PI)
   }
 
