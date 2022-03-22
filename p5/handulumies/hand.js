@@ -1,34 +1,18 @@
 import { Arm } from "./arm.js"
+import { Arm_sim } from "./arm-sim.js"
 
 export class Hand {
   constructor(num, anchor, g, v) {
     this.arms = []
-    this.arms_length = []
-    this.hand_length = 0
-
     for ( let i = 0; i < num; i++ ) {
-      const length = height / ((Math.random() + 1.25) * num)
-      this.arms_length.push(length)
-      this.hand_length += length
-    }
-
-    for ( let i = 0; i < num; i++ ) {
-      if (i === 0)
-        this.arms.push(new Arm({
-          length: this.arms_length[i],
-          parent: anchor,
-          g,
-          v,
-        }))
-      else {
-        this.arms.push(new Arm({
-          length: this.arms_length[i],
-          parent: this.arms[i - 1],
-          g,
-          v,
-        }))
-        this.arms[i - 1].child = this.arms[i]
-      }
+      this.arms.push(new Arm({
+        length: height / ((Math.random() + 1.25) * num),
+        parent: i ? this.arms[i - 1] : anchor,
+        angle: Math.PI * (Math.random() - 0.5) * 2,
+        g,
+        v,
+      }))
+      i && (this.arms[i - 1].child = this.arms[i])
     }
   }
 
