@@ -1,7 +1,7 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import { Hand } from "./hand.js"
 import { getGUI } from "./gui.js"
-import { clamp, random, random_hex, assign } from "../utils.js"
+import { clamp, random, random_hex, assign, isFocused } from "../utils.js"
 
 let hands = [],
     arm_num = 4,
@@ -10,20 +10,29 @@ let hands = [],
     g = 0.006,
 
     bg = "#eee",
-    max_weight = 128,
-    min_weight = 8,
+    max_weight = 192,
+    min_weight = 12,
     line_length = 128
-    // noise_offset = 0.000
 
 
 
 const init_hands = (hands_num) => {
   const hands = []
   const delta_y = height / (hands_num * 1.5) | 0
+  const delta_x = width > height ? (width - height) / (hands_num * 1.5) | 0 : 0
+  const delta_w = Math.sqrt(width * height) / 1000
   for (let i = 0; i < hands_num; i++) {
     hands.push({
 
-      hand: new Hand(arm_num, i * delta_y, g, random(0.02, 0.05)),
+      hand: new Hand(
+        arm_num,
+        {
+          x: width / 2 + (i % 2 == 0 ? i : -i) * delta_x,
+          y: i * delta_y
+        },
+        g,
+        random(0.02, 0.05),
+      ),
       points: [],
       color: {
         hex: "#" + random_hex(3),
@@ -32,7 +41,7 @@ const init_hands = (hands_num) => {
         // b: random(25, 100) | 0,
         // hues: [],
       },
-      weight: random(min_weight, max_weight) | 0,
+      weight: random(min_weight, max_weight) * delta_w | 0,
 
     })
   }
@@ -49,6 +58,9 @@ window.setup = function() {
   strokeJoin(ROUND)
   // colorMode(HSB)
   hands = init_hands(parseInt(handnum.value))
+}
+window.windowResized = function() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 
@@ -113,8 +125,7 @@ handnum.oninput = () => {
 }
 reset.onclick = handle_reset
 play.onclick = toggle_play
-document.addEventListener("keyup", (e) => {
-  e.preventDefault()
-  e.code === "Space" && toggle_play()
-  e.code === "Enter" && handle_reset()
-})
+document.onkeyup = ({ code }) => {
+  if (code === "Space" && !isFocused(reset, play)) toggle_play()
+  if (code === "Enter" && !isFocused(reset, play)) handle_reset()
+}
