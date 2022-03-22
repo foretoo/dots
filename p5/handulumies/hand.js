@@ -5,25 +5,19 @@ export class Hand {
   constructor(num, anchor, g, v) {
     this.arms = []
     for ( let i = 0; i < num; i++ ) {
-      this.arms.push(new Arm({
+      this.arms.push(new Arm_sim({
         length: height / ((Math.random() + 1.25) * num),
         parent: i ? this.arms[i - 1] : anchor,
         angle: Math.PI * (Math.random() - 0.5) * 2,
-        g,
-        v,
+        // g,
+        // v,
       }))
       i && (this.arms[i - 1].child = this.arms[i])
     }
   }
 
   get anchor() {
-    const point = this.arms[0].parent
-    return {
-      get x() { return point.x },
-      get y() { return point.y },
-      set x(value) { point.x = value },
-      set y(value) { point.y = value },
-    }
+    return point = this.arms[0].parent
   }
 
   get point() {
