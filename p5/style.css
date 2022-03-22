@@ -13,7 +13,6 @@ html, body {
 }
 body {
   display: flex;
-  background: #111;
 }
 main {
   margin: auto;
@@ -28,6 +27,7 @@ canvas {
   align-items: center;
   gap: 1rem;
   font-size: 0.8rem;
+  z-index: 1;
 }
 .controls * {
   font-size: inherit;
@@ -61,4 +61,16 @@ input[type=number] {
   height: 2rem;
   padding: 0 0 0 0.8rem;
   border-radius: 0.5rem;
+}
+
+/* .p5Canvas {
+  -webkit-filter: url("#goo");
+	filter: url("#goo");
+  z-index: -1;
+} */
+#stats{
+  position:absolute;
+  top:0;
+  right:0;
+  z-index: 2;
 }
