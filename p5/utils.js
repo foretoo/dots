@@ -2,6 +2,16 @@ export const clamp = (value, min, max) => (
   value < min ? min : value > max ? max : value
 )
 
+const polynomify = (value) => value * value * (3 - 2 * value)
+export const smoothstep = (value, min, max) => (
+  polynomify(clamp((value - min) / (max - min), 0, 1))
+)
+
+export const get1DNoise = (x) => ((
+  ( Math.sin( 4.1 * x) + Math.sin(Math.PI * x) ) / 2 +
+  ( Math.sin(-1.1 * x) + Math.sin(Math.E  * x) ) / 2
+) / 2)
+
 const hex_digits = "0123456789abcdef"
 export const random_hex = (n) => {
   let result = ""
