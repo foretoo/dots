@@ -42,8 +42,8 @@ window.draw = function() {
 
   trace.noStroke()
   trace.fill("black")
-  trace.rect(0, 0, width, 1)
-  trace.rect(0, height - 1, width, 1)
+  trace.rect(0, 0, width, Math.abs(trace_vel))
+  trace.rect(0, height - Math.abs(trace_vel), width, Math.abs(trace_vel))
 
   image(trace, 0, 0)
   if (is_hand_display) hand.draw()
@@ -68,7 +68,12 @@ gui.handdraw.onchange = () => {
   else gui.handdraw.removeAttribute("checked")
 }
 gui.reset.onclick = () => {
-  hand = new Hand(arm_num, height / arm_num, g, 0.04)
+  hand = new Hand({
+    num: arm_num,
+    anchor: {x: width / 2, y: height / arm_num },
+    gravity: g,
+    velocity_to_clamp: 0.02,
+  })
   trace.background(0)
 }
 gui.play.onclick = () => {

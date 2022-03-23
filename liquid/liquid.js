@@ -121,7 +121,7 @@ const handle_reset = () => {
 //   else handdraw.setAttribute("checked", null)
 // }
 gui.handnum.oninput = () => {
-  handnum.value = clamp(parseInt(handnum.value), 1, 48)
+  gui.handnum.value = clamp(parseInt(gui.handnum.value), 1, 48)
   handle_reset()
 }
 gui.reset.onclick = handle_reset
