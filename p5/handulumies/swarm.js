@@ -1,5 +1,5 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
-import { Hand } from "./hand.js"
+import { Hand } from "../assets/hand.js"
 import { getGUI, stats } from "./gui.js"
 import { clamp, random, assign_obj, assign_val, isFocused } from "../utils.js"
 
@@ -14,23 +14,23 @@ let hands = [],
 
 
 
-const init_hands = (hands_num) => {
+const init_hands = (hand_num) => {
   const hands = []
-  const delta_y = height / (hands_num * 1.5)
-  const delta_x = width > height ? (width - height) / (hands_num * 1.5) : 0
+  const delta_y = height / (hand_num * 1.5)
+  const delta_x = width > height ? (width - height) / (hand_num * 1.5) : 0
   const delta_w = Math.sqrt(width * height) / 1000
-  for (let i = 0; i < hands_num; i++) {
+  for (let i = 0; i < hand_num; i++) {
     hands.push({
 
-      hand: new Hand(
-        arm_num,
-        {
+      hand: new Hand({
+        num: arm_num,
+        anchor: {
           x: width / 2 + (i % 2 == 0 ? i : -i) * delta_x,
           y: i * delta_y
         },
-        g,
-        random(0.02, 0.05),
-      ),
+        gravity: g,
+        velocity_to_clamp: random(0.02, 0.05),
+      }),
       points: [],
       color: {
         h: random(0, 360),

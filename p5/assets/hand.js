@@ -2,7 +2,7 @@ import { Arm } from "./arm.js"
 import { Arm_sim } from "./arm-sim.js"
 
 export class Hand {
-  constructor(num, anchor, g, v) {
+  constructor({ num, anchor, gravity, velocity_to_clamp }) {
     this.arms = []
     for ( let i = 0; i < num; i++ ) {
       this.arms.push(new Arm_sim({
