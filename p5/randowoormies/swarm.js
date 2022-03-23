@@ -1,6 +1,6 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import { Hand } from "../assets/hand.js"
-import { getGUI, stats } from "./gui.js"
+import getGUI from "../gui.js"
 import { clamp, random, assign_obj, assign_val, isFocused } from "../utils.js"
 
 let hands = [],
@@ -55,7 +55,7 @@ window.setup = function() {
   strokeJoin(ROUND)
   colorMode(HSB)
 
-  hands = init_hands(parseInt(handnum.value))
+  hands = init_hands(parseInt(gui.handnum.value))
 }
 window.windowResized = function() {
   resizeCanvas(windowWidth, windowHeight);
@@ -65,7 +65,7 @@ window.windowResized = function() {
 
 ////////-- DRAW --////////
 window.draw = function() {
-  stats.begin()
+  gui.stats.begin()
   drawingContext.clearRect(0, 0, width, height);
 
   const shift = sin(frameCount * 0.001)
@@ -90,42 +90,47 @@ window.draw = function() {
   })
 
   // if (handdraw.checked) hands.forEach(({ hand }) => hand.draw())
-  stats.end()
+  gui.stats.end()
 }
 
 
 
 ////////-- ADDITIONS --////////
-const { reset, play, handnum } = getGUI("reset", "play", "handnum")
+const gui = getGUI(
+  { type: "stats" },
+  { type: "button", name: "reset" },
+  { type: "button", name: "play" },
+  { type: "number", name: "handnum", min: 0, value: 9 }
+  )
 const toggle_play = () => {
   if (isLooping()) {
-    play.textContent = "play"
+    gui.play.textContent = "play"
     noLoop()
   }
   else {
-    play.textContent = "stop"
+    gui.play.textContent = "stop"
     loop()
   }
 }
 const handle_reset = () => {
-  hands = init_hands(parseInt(handnum.value))
+  hands = init_hands(parseInt(gui.handnum.value))
   drawingContext.clearRect(0, 0, width, height);
   if (!isLooping()) {
-    play.textContent = "stop"
+    gui.play.textContent = "stop"
     loop()
   }
 }
-// handdraw.onchange = () => {
+// gui.handdraw.onchange = () => {
 //   if (handdraw.checked) handdraw.removeAttribute("checked")
 //   else handdraw.setAttribute("checked", null)
 // }
-handnum.oninput = () => {
+gui.handnum.oninput = () => {
   handnum.value = clamp(parseInt(handnum.value), 1, 48)
   handle_reset()
 }
-reset.onclick = handle_reset
-play.onclick = toggle_play
+gui.reset.onclick = handle_reset
+gui.play.onclick = toggle_play
 document.onkeyup = ({ code }) => {
-  if (code === "Space" && !isFocused(reset, play)) toggle_play()
-  if (code === "Enter" && !isFocused(reset, play)) handle_reset()
+  if (code === "Space" && !isFocused(gui.reset, gui.play)) toggle_play()
+  if (code === "Enter" && !isFocused(gui.reset, gui.play)) handle_reset()
 }
