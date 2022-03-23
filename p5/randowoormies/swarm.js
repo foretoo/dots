@@ -1,6 +1,6 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
-import { Hand } from "../assets/hand.js"
 import getGUI from "../gui.js"
+import { Hand } from "../assets/hand.js"
 import { clamp, random, assign_obj, assign_val, isFocused } from "../utils.js"
 
 let hands = [],
