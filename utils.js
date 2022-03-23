@@ -21,7 +21,7 @@ export const random_hex = (n) => {
   return result
 }
 
-export const random = (min, max) => (
+export const random = (min = 0, max = 1) => (
   min + Math.random() * (max - min)
 )
 
