@@ -1,4 +1,4 @@
-import { clamp } from "../utils.js"
+import { clamp, random } from "../utils.js"
 
 export class Arm extends p5.Vector {
   constructor({ parent, length, x, y, gravity, velocity_to_clamp }) {
@@ -6,14 +6,15 @@ export class Arm extends p5.Vector {
     this.parent = parent
     this.child = null
     this.length = length
+    this.length_f = random(1, 3)
 
-    this.angle = Math.PI * (Math.random() - 0.5) * 2
+    this.angle = PI * (random() - 0.5) * 2
     this.x = this.parent.x + sin(this.angle) * this.length
     this.y = this.parent.y + cos(this.angle) * this.length
 
     this.g = gravity
     this.vtc = velocity_to_clamp
-    this.mass = Math.random() * this.g * 5000
+    this.mass = random() * this.g * 5000
     this.vel = 0
     this.acc = 0
     // if parent !== anchor of handulumie
@@ -41,6 +42,7 @@ export class Arm extends p5.Vector {
   }
 
   update() {
+    !this.child && (this.length += sin(frameCount * 0.05) * this.length_f)
     this.acc = this.getAcc()
     this.vel += this.acc
     this.vel = clamp(this.vel, -this.vtc, this.vtc)
