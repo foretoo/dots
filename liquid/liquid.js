@@ -1,5 +1,5 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
-import getGUI from "../gui.js"
+import getGUI from "../gui/gui.js"
 import { Hand } from "../assets/hand.js"
 import { clamp, random, assign_obj, isFocused } from "../utils.js"
 
