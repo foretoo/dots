@@ -1,13 +1,18 @@
-import "../lib/p5.min.js"
+import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
+import getGUI from "../gui.js"
+import { clamp } from "../utils.js"
 
-let hands, trace, px, py
-const START = 61
-const END = 1387
-const NUM = 5
-let friction = 1
-let g = 0.0477
-let isHandDispaly = false
-const lineWidth = 13
+const START = 61,
+      END = 1387,
+      NUM = 5,
+      lineWidth = 13
+
+let hands, trace, px, py,
+    friction = 1,
+    g = 0.0477,
+    isHandDispaly = false
+
+
 
 class Hand extends p5.Vector {
   constructor(props) {
@@ -59,6 +64,7 @@ class Hand extends p5.Vector {
     this.acc = this.getAcc()
     this.vel += this.acc
     this.vel *= friction - (this.vel ** 2)
+    this.vel = clamp(this.vel, -0.06, 0.06)
     this.angle += this.vel
     this.x = this.parent.x + sin(this.angle) * this.length
     this.y = this.parent.y + cos(this.angle) * this.length
@@ -125,7 +131,7 @@ window.draw = function() {
     noLoop()
   }
   else {
-    frameCount < END * 0.8 ? friction -= 0.00001 : friction -= 0.0001
+    frameCount < END * 0.8 ? friction -= 0.00001 : friction -= 0.00005
     update()
     image(trace, 0, 0)
     if (isHandDispaly) for (let hand of hands) hand.draw()
@@ -142,27 +148,12 @@ window.windowResized = function() {
 
 
 
-const controls = document.createElement('div')
-controls.style.cssText = `
-  position: absolute;
-  padding: 20px;
-  display: flex;
-  align-items: baseline;
-  gap: 20px;
-`
-document.body.prepend(controls)
 
-const button = document.createElement('button')
-button.textContent = "redraw"
-controls.append(button)
-
-const ifHandDispaly = document.createElement("input")
-ifHandDispaly.setAttribute("type", "checkbox")
-controls.append(ifHandDispaly)
-
-
-
-ifHandDispaly.onchange = () => {
+const gui = getGUI(
+  { type: "button", name: "redraw" },
+  { type: "checkbox", name: "handdraw" },
+)
+gui.handdraw.onchange = () => {
   isHandDispaly = !isHandDispaly
   if (frameCount > END) {
     background(0)
@@ -170,7 +161,7 @@ ifHandDispaly.onchange = () => {
     if (isHandDispaly) for (let hand of hands) hand.draw()
   }
 }
-button.onclick = () => {
+gui.redraw.onclick = () => {
   friction = 1
   g = 0.0477
   frameCount = 0
