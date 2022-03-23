@@ -89,7 +89,7 @@ window.draw = function() {
     hand.update()
   })
 
-  // if (handdraw.checked) hands.forEach(({ hand }) => hand.draw())
+  // if (gui.handdraw.checked) hands.forEach(({ hand }) => hand.draw())
   gui.stats.end()
 }
 
@@ -100,7 +100,7 @@ const gui = getGUI(
   { type: "stats" },
   { type: "button", name: "reset" },
   { type: "button", name: "play" },
-  { type: "number", name: "handnum", min: 0, value: 9 }
+  { type: "number", name: "handnum", min: 0, value: 9 },
 )
 const toggle_play = () => {
   if (isLooping()) {
