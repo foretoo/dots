@@ -101,7 +101,7 @@ const gui = getGUI(
   { type: "button", name: "reset" },
   { type: "button", name: "play" },
   { type: "number", name: "handnum", min: 0, value: 9 }
-  )
+)
 const toggle_play = () => {
   if (isLooping()) {
     gui.play.textContent = "play"
