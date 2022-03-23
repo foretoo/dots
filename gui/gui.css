@@ -12,7 +12,7 @@
   box-shadow:
     0 0.2rem 0.2rem #0002,
     inset 0 2px 1px #0001,
-    inset 0 -2px 1px #fff3,
+    inset 0 -2px 1px #fff5,
     inset 0 0 32px #fff8;
   background-color: #fff5;
   backdrop-filter: blur(8px);
@@ -21,7 +21,8 @@
 .controls button {
   height: 2rem;
   padding: 0 0.8rem;
-  color: #111;
+  color: #000;
+  text-shadow: 0 -1px 2px #fff5;
   border-radius: 0.5rem;
   cursor: pointer;
 }
@@ -30,15 +31,16 @@
 }
 .controls input[type=checkbox] {
   appearance: none;
-  background-color: #fff;
+  background-color: #fffa;
   width: 1rem;
   height: 1rem;
-  border: 0.2rem solid #fff;
   border-radius: 0.2rem;
+  box-shadow: 0 0.2rem 0.2rem #0002;
   cursor: pointer;
 }
 .controls input[type=checkbox]:checked {
-  background-color: #07f;
+  background-color: rgba(0, 89, 255, 0.589);
+  border: 0.2rem solid #fff8;
 }
 .controls input[type=number] {
   width: 3rem;

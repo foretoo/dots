@@ -30,7 +30,6 @@ const init_hands = (hand_num) => {
           y: i * delta_y
         },
       }),
-      points: [],
       color: {
         h: random(0, 360),
         s: random(60, 90),
@@ -71,15 +70,11 @@ window.draw = function() {
   ctx.clearRect(0, 0, width, height)
 
   const shift = sin(frameCount * 0.002)
-  hands.forEach(({ hand, points, color, weight }, i) => {
-    assign_obj(hand.point, points, line_length)
-    strokeWeight(weight)
+  hands.forEach(({ hand, color, weight }, i) => {
     const sign = i % 2 == 0 ? 1 : -1
-    const hue = (color.h + shift * sign * 180) % 360
-    stroke(hue, color.s, color.b)
-    beginShape()
-    points.forEach(point => vertex(point.x, point.y))
-    endShape()
+    const hue = (color.h + shift * sign * 60) % 360
+    fill(hue, color.s, color.b)
+    circle(hand.point.x, hand.point.y, weight)
 
     hand.update()
   })

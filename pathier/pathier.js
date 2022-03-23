@@ -17,7 +17,6 @@ let hand = null,
 ////////-- SETUP --////////
 window.setup = function() {
   createCanvas(windowWidth, windowHeight)
-  background(0)
   trace = createGraphics(width, height)
   trace.background(0)
   trace.strokeWeight(line_width)
@@ -56,7 +55,7 @@ const gui = getGUI(
   { type: "button", name: "reset" },
   { type: "button", name: "play" },
   { type: "checkbox", name: "handdraw" },
-  { type: "range", name: "velocity", min: -10, max: 10, value: trace_vel },
+  { type: "range", name: "velocity", min: -5, max: 5, value: trace_vel },
 )
 gui.play.textContent = "stop"
 gui.velocity.oninput = () => {
