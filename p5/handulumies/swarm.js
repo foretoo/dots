@@ -23,6 +23,7 @@ const init_hands = (hand_num) => {
     hands.push({
 
       hand: new Hand({
+        isSim: false,
         num: arm_num,
         anchor: {
           x: width / 2 + (i % 2 == 0 ? i : -i) * delta_x,

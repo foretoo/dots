@@ -2,15 +2,16 @@ import { Arm } from "./arm.js"
 import { Arm_sim } from "./arm-sim.js"
 
 export class Hand {
-  constructor({ num, anchor, gravity, velocity_to_clamp }) {
+  constructor({ isSim, num, anchor, gravity, velocity_to_clamp }) {
     this.arms = []
+    const arm = isSim ? Arm_sim : Arm
     for ( let i = 0; i < num; i++ ) {
-      this.arms.push(new Arm_sim({
+      this.arms.push(new arm({
         length: height / ((Math.random() + 1.25) * num),
         parent: i ? this.arms[i - 1] : anchor,
         angle: Math.PI * (Math.random() - 0.5) * 2,
-        // g,
-        // v,
+        gravity,
+        velocity_to_clamp,
       }))
       i && (this.arms[i - 1].child = this.arms[i])
     }
