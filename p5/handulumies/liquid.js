@@ -3,10 +3,9 @@ import { Hand } from "./hand.js"
 import { getGUI, stats } from "./gui.js"
 import { clamp, random, assign_obj, isFocused } from "../utils.js"
 
-let hands = [],
+let ctx,
+    hands = [],
     arm_num = 4,
-
-    g = 0.006,
 
     bg = "#eee",
     max_weight = 512,
@@ -53,6 +52,10 @@ window.setup = function() {
   strokeJoin(ROUND)
   colorMode(HSB)
 
+  ctx = drawingContext
+  const clip = ctx.arc(width / 2, height / 2, min(width, height) / 2, 0, 2 * PI)
+  ctx.clip(clip)
+
   hands = init_hands(parseInt(handnum.value))
 }
 window.windowResized = function() {
@@ -64,7 +67,7 @@ window.windowResized = function() {
 ////////-- DRAW --////////
 window.draw = function() {
   stats.begin()
-  drawingContext.clearRect(0, 0, width, height);
+  ctx.clearRect(0, 0, width, height)
 
   const shift = sin(frameCount * 0.002)
   hands.forEach(({ hand, points, color, weight }, i) => {
@@ -100,7 +103,6 @@ const toggle_play = () => {
 }
 const handle_reset = () => {
   hands = init_hands(parseInt(handnum.value))
-  background(bg)
   if (!isLooping()) {
     play.textContent = "stop"
     loop()
