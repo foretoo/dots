@@ -14,12 +14,11 @@ let hands = [],
 
 
 
-const init_hands = (hand_num) => {
-  const hands = []
-  const delta_y = height / (hand_num * 1.5)
-  const delta_x = width > height ? (width - height) / (hand_num * 1.5) : 0
+const init_hands = () => {
+  const delta_y = height / (gui.handnum.value * 1.5)
+  const delta_x = width > height ? (width - height) / (gui.handnum.value * 1.5) : 0
   const delta_w = Math.sqrt(width * height) / 1000
-  for (let i = 0; i < hand_num; i++) {
+  for (let i = 0; i < gui.handnum.value; i++) {
     hands.push({
 
       hand: new Hand({
@@ -35,15 +34,14 @@ const init_hands = (hand_num) => {
       points: [],
       color: {
         h: random(0, 360),
-        s: random(20, 100),
-        b: random(20, 100),
+        s: random(50, 90),
+        b: random(50, 90),
         // hues: [],
       },
       weight: random(min_weight, max_weight) * delta_w,
 
     })
   }
-  return hands
 }
 
 
@@ -55,7 +53,7 @@ window.setup = function() {
   strokeJoin(ROUND)
   colorMode(HSB)
 
-  hands = init_hands(parseInt(gui.handnum.value))
+  init_hands()
 }
 window.windowResized = function() {
   resizeCanvas(windowWidth, windowHeight);
@@ -99,7 +97,7 @@ window.draw = function() {
 const gui = getGUI(
   { type: "stats" },
   { type: "button", name: "reset" },
-  { type: "button", name: "play" },
+  { type: "button", name: "play"  },
   { type: "number", name: "handnum", min: 0, value: 9 },
 )
 gui.play.textContent = "stop"
@@ -114,7 +112,8 @@ const toggle_play = () => {
   }
 }
 const handle_reset = () => {
-  hands = init_hands(parseInt(gui.handnum.value))
+  hands = []
+  init_hands()
   drawingContext.clearRect(0, 0, width, height);
   if (!isLooping()) {
     gui.play.textContent = "stop"
@@ -126,6 +125,7 @@ const handle_reset = () => {
 //   else handdraw.setAttribute("checked", null)
 // }
 gui.handnum.oninput = () => {
+  if (gui.handnum.value == hands.length) return
   gui.handnum.value = clamp(parseInt(gui.handnum.value), 1, 48)
   handle_reset()
 }
