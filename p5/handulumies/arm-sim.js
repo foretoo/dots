@@ -1,10 +1,9 @@
 import { random } from "../utils.js"
 
 export class Arm_sim extends p5.Vector {
-  constructor({ parent, child, length, angle, x, y }) {
+  constructor({ parent, length, angle, x, y }) {
     super(x, y)
     this.parent = parent || null
-    this.child = child || null
     this.length = length
     this.angle = angle
     this.x = this.parent.x + sin(angle) * length
