@@ -9,20 +9,26 @@
 }
 .controls * {
   font-size: inherit;
-  box-shadow: 0 0.1rem 0.4rem #0001;
+  box-shadow:
+    0 0.2rem 0.2rem #0002,
+    inset 0 2px 1px #0001,
+    inset 0 -2px 1px #fff3,
+    inset 0 0 32px #fff8;
+  background-color: #fff5;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(10px);
 }
-button {
+.controls button {
   height: 2rem;
   padding: 0 0.8rem;
   color: #111;
   border-radius: 0.5rem;
-  background: white;
   cursor: pointer;
 }
-button:disabled {
+.controls button:disabled {
   color: #aaa;
 }
-input[type=checkbox] {
+.controls input[type=checkbox] {
   appearance: none;
   background-color: #fff;
   width: 1rem;
@@ -31,14 +37,19 @@ input[type=checkbox] {
   border-radius: 0.2rem;
   cursor: pointer;
 }
-input[type=checkbox]:checked {
+.controls input[type=checkbox]:checked {
   background-color: #07f;
 }
-input[type=number] {
+.controls input[type=number] {
   width: 3rem;
   height: 2rem;
   padding: 0 0 0 0.8rem;
   border-radius: 0.5rem;
+}
+.controls input[type=range] {
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 #stats{
   position:absolute;
