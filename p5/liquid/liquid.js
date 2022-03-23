@@ -32,9 +32,9 @@ const init_hands = (hand_num) => {
       }),
       points: [],
       color: {
-        h: random(180, 360),
-        s: random(30, 90),
-        b: random(30, 90),
+        h: random(0, 360),
+        s: random(60, 90),
+        b: random(60, 90),
       },
       weight: random(min_weight, max_weight) * delta_w,
 
@@ -55,7 +55,7 @@ window.setup = function() {
 
   ctx = drawingContext
   const clip = ctx.arc(width / 2, height / 2, min(width, height) / 2, 0, 2 * PI)
-  ctx.clip(clip)
+  // ctx.clip(clip)
 
   hands = init_hands(parseInt(gui.handnum.value))
 }
@@ -75,7 +75,7 @@ window.draw = function() {
     assign_obj(hand.point, points, line_length)
     strokeWeight(weight)
     const sign = i % 2 == 0 ? 1 : -1
-    const hue = (color.h + shift * sign * 90) % 360
+    const hue = (color.h + shift * sign * 180) % 360
     stroke(hue, color.s, color.b)
     beginShape()
     points.forEach(point => vertex(point.x, point.y))
@@ -97,6 +97,7 @@ const gui = getGUI(
   { type: "button", name: "play" },
   { type: "number", name: "handnum", min: 0, value: 9 },
 )
+gui.play.textContent = "stop"
 const toggle_play = () => {
   if (isLooping()) {
     gui.play.textContent = "play"
