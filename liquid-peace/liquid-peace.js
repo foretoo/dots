@@ -1,16 +1,19 @@
 import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import getGUI from "../gui/gui.js"
 import { Hand } from "../assets/hand.js"
-import { clamp, random, assign_obj, isFocused } from "../utils.js"
+import { getpeacepath } from "../assets/peacepath.js"
+import { clamp, random, isFocused } from "../utils.js"
 
-let ctx,
+let p5Canvas,
+    ctx,
     hands = [],
     arm_num = 4,
 
-    bg = "#eee",
-    max_weight = 512,
-    min_weight = 128,
-    line_length = 16
+    max_weight = 384,
+    min_weight = 96
+
+const feGaussianBlur = document.querySelector("feGaussianBlur"),
+      stdDeviation   = feGaussianBlur.getAttribute("stdDeviation")
 
 
 
@@ -31,9 +34,9 @@ const init_hands = (hand_num) => {
         },
       }),
       color: {
-        h: random(0, 360),
-        s: random(60, 90),
-        b: random(60, 90),
+        h: random(40, 60),
+        s: 100,
+        b: random(75, 100),
       },
       weight: random(min_weight, max_weight) * delta_w,
 
@@ -46,20 +49,16 @@ const init_hands = (hand_num) => {
 
 ////////-- SETUP --////////
 window.setup = function() {
-  const p5Canvas = createCanvas(windowWidth, windowHeight)
+  p5Canvas = createCanvas(windowWidth, windowHeight)
   p5Canvas.style("filter", "url('#goo')")
-  noFill()
-  strokeJoin(ROUND)
+  ctx = drawingContext
+  ctx.clip(new Path2D(getpeacepath(width, height)), "evenodd")
+  feGaussianBlur.setAttribute("stdDeviation", stdDeviation * Math.min(width, height) / 1000)
+
+  noStroke()
   colorMode(HSB)
 
-  ctx = drawingContext
-  const clip = ctx.arc(width / 2, height / 2, min(width, height) / 2, 0, 2 * PI)
-  // ctx.clip(clip)
-
   hands = init_hands(parseInt(gui.handnum.value))
-}
-window.windowResized = function() {
-  resizeCanvas(windowWidth, windowHeight);
 }
 
 
@@ -72,7 +71,7 @@ window.draw = function() {
   const shift = sin(frameCount * 0.002)
   hands.forEach(({ hand, color, weight }, i) => {
     const sign = i % 2 == 0 ? 1 : -1
-    const hue = (color.h + shift * sign * 60) % 360
+    const hue = (color.h + shift * sign * 10) % 360
     fill(hue, color.s, color.b)
     circle(hand.point.x, hand.point.y, weight)
 
@@ -90,7 +89,7 @@ const gui = getGUI(
   { type: "stats" },
   { type: "button", name: "reset" },
   { type: "button", name: "play" },
-  { type: "number", name: "handnum", min: 0, value: 9 },
+  { type: "number", name: "handnum", min: 0, value: 24 },
 )
 gui.play.textContent = "stop"
 const toggle_play = () => {
@@ -104,8 +103,13 @@ const toggle_play = () => {
   }
 }
 const handle_reset = () => {
+  p5Canvas.remove()
+  p5Canvas = createCanvas(windowWidth, windowHeight)
+  p5Canvas.style("filter", "url('#goo')")
+  ctx.clip(new Path2D(getpeacepath(width, height)), "evenodd")
+  feGaussianBlur.setAttribute("stdDeviation", stdDeviation * Math.min(width, height) / 1000)
+
   hands = init_hands(parseInt(gui.handnum.value))
-  drawingContext.clearRect(0, 0, width, height);
   if (!isLooping()) {
     gui.play.textContent = "stop"
     loop()
@@ -125,3 +129,5 @@ document.onkeyup = ({ code }) => {
   if (code === "Space" && !isFocused(gui.reset, gui.play)) toggle_play()
   if (code === "Enter" && !isFocused(gui.reset, gui.play)) handle_reset()
 }
+
+window.windowResized = handle_reset
