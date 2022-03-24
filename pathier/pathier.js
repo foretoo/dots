@@ -74,6 +74,10 @@ gui.reset.onclick = () => {
     velocity_to_clamp: 0.02,
   })
   trace.background(0)
+  if (!isLooping()) {
+    gui.play.textContent = "stop"
+    loop()
+  }
 }
 gui.play.onclick = () => {
   if (isLooping()) {
