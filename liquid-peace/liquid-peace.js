@@ -34,9 +34,9 @@ const init_hands = (hand_num) => {
         },
       }),
       color: {
-        h: random(40, 60),
+        h: random(45, 55),
         s: 100,
-        b: random(75, 100),
+        b: random(80, 100),
       },
       weight: random(min_weight, max_weight) * delta_w,
 
@@ -65,7 +65,7 @@ window.setup = function() {
 
 ////////-- DRAW --////////
 window.draw = function() {
-  gui.stats.begin()
+  // gui.stats.begin()
   ctx.clearRect(0, 0, width, height)
 
   const shift = sin(frameCount * 0.002)
@@ -79,17 +79,17 @@ window.draw = function() {
   })
 
   // if (gui.handdraw.checked) hands.forEach(({ hand }) => hand.draw())
-  gui.stats.end()
+  // gui.stats.end()
 }
 
 
 
 ////////-- ADDITIONS --////////
 const gui = getGUI(
-  { type: "stats" },
+  // { type: "stats" },
   { type: "button", name: "reset" },
   { type: "button", name: "play" },
-  { type: "number", name: "handnum", min: 0, value: 24 },
+  { type: "number", name: "handnum", min: 0, value: 32 },
 )
 gui.play.textContent = "stop"
 const toggle_play = () => {
