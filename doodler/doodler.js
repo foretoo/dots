@@ -151,6 +151,7 @@ window.windowResized = function() {
 
 const gui = getGUI(
   { type: "button", name: "redraw" },
+  { type: "button", name: "save" },
   { type: "checkbox", name: "handdraw" },
 )
 gui.handdraw.onchange = () => {
@@ -169,4 +170,7 @@ gui.redraw.onclick = () => {
   if (height > width) g *= width / height
   trace.background(0)
   loop()
+}
+gui.save.onclick = () => {
+  saveCanvas("doodler", "png")
 }
