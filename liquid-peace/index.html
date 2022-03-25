@@ -10,19 +10,35 @@
   </head>
   <body>
     <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
-      <filter id="goo">
-        <feGaussianBlur
-          in="SourceGraphic"
-          stdDeviation="24"
-          result="blur" />
-        <feColorMatrix
-          in="blur"
-          mode="matrix"
+      <filter id="liquid">
+        <feGaussianBlur in="SourceGraphic" result="blur"
+          stdDeviation="24" />
+        <feColorMatrix in="blur" result="liquid" mode="matrix"
           values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 90 -60" />
+
+        <!-- <feColorMatrix in="liquid" result="liquidalpha" mode="matrix"
+          values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+        <feGaussianBlur in="liquidalpha" result="liquidalphablured"
+          stdDeviation="8"/>
+        <feSpecularLighting in="liquidalphablured" result="specOut"
+          surfaceScale="36"
+          specularConstant="4"
+          specularExponent="36"
+          lighting-color="white" >
+          <fePointLight x="50" y="-50" z="100" />
+        </feSpecularLighting>
+        
+        <feComposite in="specOut" in2="liquidalpha" result="bevel"
+          operator="in" />
+        <feMerge>
+          <feMergeNode in="liquid" />
+          <feMergeNode in="bevel" />
+        </feMerge> -->
       </filter>
     </svg>
     <!-- <script src="lib/p5.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="liquid-peace.js" type="module" ></script>
   </body>
 </html>
