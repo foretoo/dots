@@ -20,17 +20,16 @@ class Hand extends p5.Vector {
 
     let lengthQ, massQ
     if (width > height) {
-      lengthQ = height
       massQ = g * 1000
     }
     else {
-      lengthQ = ((height + width) - (height - width)) / 2
       massQ = g * 1000 / (height / width)
     }
 
     this.parent = props.parent || null
     this.child = props.child || null
-    this.length = props.length || lengthQ / ((Math.random() + 1.25) * NUM)
+    this.length = props.length || height / ((Math.random() + 1.25) * NUM)
+    this.length_f = (Math.random() * 2) + 1
     this.mass = props.mass || massQ + Math.random() * massQ
     this.angle = props.angle || Math.PI * (Math.random() - 0.5) * 2
     this.x = this.parent.x + sin(this.angle) * this.length
@@ -61,6 +60,7 @@ class Hand extends p5.Vector {
   }
 
   update() {
+    !this.child && (this.length += sin(frameCount * 0.05) * this.length_f)
     this.acc = this.getAcc()
     this.vel += this.acc
     this.vel *= friction - (this.vel ** 2)
@@ -106,7 +106,7 @@ window.setup = function() {
   trace = createGraphics(width, height)
   trace.background(0)
   trace.stroke(255)
-  trace.strokeWeight(lineWidth)
+  trace.strokeWeight(lineWidth * Math.sqrt(width * height) / 618)
   hands = initHands(NUM)
   if (height > width) g *= width / height
 }
