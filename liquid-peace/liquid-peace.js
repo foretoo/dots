@@ -2,7 +2,7 @@ import "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"
 import getGUI from "../gui/gui.js"
 import { Hand } from "../assets/hand.js"
 import { getpeacepath } from "../assets/peacepath.js"
-import { clamp, random, isFocused } from "../utils.js"
+import { random, isFocused } from "../utils.js"
 
 let p5Canvas,
     ctx

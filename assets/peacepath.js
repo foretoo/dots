@@ -11,16 +11,15 @@ export const getpeacepath = (width, height) => {
   const regfloat = /[0-9.]+/g
   const scalefloat = f => parseFloat(f) * (min / 1000)
 
-  const regstart = /M[0-9. ]+/g
-  const scalestart = s => (
-    s.replace(regfloat, (f, i) => (
-      i === 1
-        ? parseFloat(f) + (width - min)  / 2
-        : parseFloat(f) + (height - min) / 2
-    ))
+  const regstart = /(^[mM])([0-9.]+)([-, ])([0-9.]+)/g
+  const scalestart = (_, gm, gx, gs, gy) => (
+    gm + (parseFloat(gx) + (width - min)  / 2) +
+    gs + (parseFloat(gy) + (height - min) / 2)
   )
 
   return data
+    .trim()
+    .replace(/\s+/g, " ")
     .replace(regfloat, scalefloat)
     .replace(regstart, scalestart)
 }
