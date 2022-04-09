@@ -16,7 +16,8 @@ const gradients_num = 3,
               () => random(height)
             )
           ).reverse()
-        )
+        ),
+      vel = 1
 
 
 
@@ -42,11 +43,15 @@ const loop = () => {
 
       layer.forEach((y) => {
         const value = get_noise(
-          frame * (!j ? 0.001 : j * 0.001),
-          y + i * height
-        )
-        const color = `rgba(255,${value * 159 | 0},${value * 31 | 0},${pow(value, !j ? 1 : j * 6)})`
-        img.addColorStop(y / height, color)
+                frame * (!j ? 0.002 * vel : j * 0.002 * vel),
+                y + i * height
+              ),
+              r = 255,
+              g = value * 159 | 0,
+              b = value * 31  | 0,
+              a = pow(value, !j ? 1 : j * 6)
+
+        img.addColorStop(y / height, `rgba(${r},${g},${b},${a})`)
       })
 
       ctx.fillStyle = img
