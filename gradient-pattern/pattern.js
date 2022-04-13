@@ -11,10 +11,7 @@ const gradients_num = 3,
       gradients =
         newarr(gradients_num, () =>
           newarr(layers_num, (_, i) =>
-            newarr(
-              !i ? colors_num : colors_num / (i * i * 5) | 0,
-              () => random(height)
-            )
+            newarr(colors_num / pow(i + 1, 2) | 0, () => random())
           ).reverse()
         ),
       vel = 1
@@ -43,15 +40,15 @@ const loop = () => {
 
       layer.forEach((y) => {
         const value = get_noise(
-                frame * (!j ? 0.002 * vel : j * 0.002 * vel),
-                y + i * height
+                frame * layer.length * vel / 10000,
+                (y + i) * height
               ),
               r = 255,
               g = value * 159 | 0,
               b = value * 31  | 0,
-              a = pow(value, !j ? 1 : j * 6)
+              a = pow(value, 1 + j * 6)
 
-        img.addColorStop(y / height, `rgba(${r},${g},${b},${a})`)
+        img.addColorStop(y, `rgba(${r},${g},${b},${a})`)
       })
 
       ctx.fillStyle = img
