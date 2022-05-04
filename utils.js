@@ -46,10 +46,15 @@ export const isObject = (obj) => (
   Object.prototype.toString.call(obj) === "[object Object]"
 )
 
+export const isFunc = (fn) => (
+  Object.prototype.toString.call(fn) === "[object Function]"
+)
+
 export const get_type = (value) => (
   Object.prototype.toString
     .call(value)
     .match(/[A-Z][a-z]+/g)[0]
+    .toLowerCase()
 )
 
 
@@ -77,7 +82,7 @@ export const assign_obj = (obj, arr, length) => {
 
 
 export const newarr = (length, mapper) => {
-  if (get_type(mapper) === "Function")
+  if (get_type(mapper) === "function")
     return Array(length).fill().map(mapper)
   else
     return Array(length).fill(mapper)
