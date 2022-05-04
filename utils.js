@@ -82,15 +82,15 @@ export const assign_obj = (obj, arr, length) => {
 
 
 export const newarr = (length, mapper) => {
-  if (get_type(mapper) === "function")
-    return Array(length).fill().map(mapper)
+  if (isFunc(mapper))
+    return Array(length).fill(null).map(mapper)
   else
     return Array(length).fill(mapper)
 }
 
 
 
-export const getcanvas = (w, h) => {
+export const getcanvas = (w, h, id) => {
   let width = w,
       height = h
 
@@ -98,7 +98,7 @@ export const getcanvas = (w, h) => {
         ctx = canvas.getContext("2d")
 
   document.body.prepend(canvas)
-  canvas.setAttribute("id", "canvas")
+  canvas.setAttribute("id", id ? id : "canvas")
   if (width) {
     if (!height) height = width
     canvas.setAttribute("style", `width:${width}px;height:${height}px;`)
