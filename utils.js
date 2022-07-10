@@ -81,12 +81,11 @@ export const assign_obj = (obj, arr, length) => {
 
 
 
-export const newarr = (length, mapper) => {
-  if (isFunc(mapper))
-    return Array(length).fill(null).map(mapper)
-  else
-    return Array(length).fill(mapper)
-}
+export const newarr = (length, mapper) => (
+  isFunc(mapper)
+  ? Array(length).fill(null).map(mapper)
+  : Array(length).fill(mapper)
+)
 
 
 
