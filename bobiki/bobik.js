@@ -3,31 +3,37 @@ import roundPolygon from "https://unpkg.com/round-polygon@latest/dist/round-poly
 
 let poly
 
-const { width, height, ctx, canvas } = getcanvas()
-const dark = Math.round(Math.random())
+const width = window.innerWidth
+const height = window.innerHeight
+const side = Math.min(width, height)
+const blur = side / 500 * 20 | 0
+console.log(blur);
+
+const { ctx, canvas } = getcanvas(side)
+canvas.style.width = canvas.style.height = `${side}px`
+const dark = Math.random()*2|0
 const pr = pxratio()
+ctx.filter = `blur(${blur}px) contrast(162%) saturate(62%)`
+document.body.style.backgroundColor = dark ? "#000" : "#fff"
 bg(dark ? "#000" : "#fff")
-// canvas.style.visibility = "hidden"
-// canvas.height = 0
-
-
 
 const displayCanvas = document.createElement("canvas")
 document.body.prepend(displayCanvas)
-// displayCanvas.style.height = "0px"
-displayCanvas.width = width * pr
-displayCanvas.height = height * pr
+displayCanvas.style.width = displayCanvas.style.height = `${side}px`
+displayCanvas.width = side * pr
+displayCanvas.height = side * pr
 const disctx = displayCanvas.getContext("2d")
 
-disctx.imageSmoothingEnabled = true;
 disctx.strokeStyle = "transparent"
 disctx.fillStyle = dark ? "#000" : "#fff"
-disctx.fillRect(0, 0, width * pr, height * pr)
+disctx.fillRect(0, 0, side * pr, side * pr)
+
+
 
 const getpoints = () =>
-  Array(3+Math.random()*18|0).fill().map(() => ({
-    x: Math.random() * width,
-    y: Math.random() * height
+  Array(3+Math.random()*11|0).fill().map(() => ({
+    x: Math.random() * side,
+    y: Math.random() * side
   }))
 
 const drawpoly = (off = 0) => {
@@ -37,41 +43,27 @@ const drawpoly = (off = 0) => {
   shape(CLOSE)
 }
 
+
+
 let i = 0
 const smookie = (color) => {
-  // bg(dark ? "#000" : "#fff")
   poly = roundPolygon(getpoints(), Number.MAX_SAFE_INTEGER)
-
-  ctx.filter = `blur(20px)`
-  ctx.globalCompositeOperation = "multiply"
-  stroke(null)
-  fill(color)
-  drawpoly(10)
-  disctx.drawImage(canvas, 0, 0)
-  ctx.globalCompositeOperation = "source-over"
-  // disctx.globalCompositeOperation = "none"
-  // bg(dark ? "#000" : "#fff")
   
   mask()
-
   drawpoly()
-
   mask(CLOSE)
-  
-  ctx.filter = `blur(20px) contrast(200%) saturate(62%)`
-  ctx.drawImage(displayCanvas, 0, 0)
-  // ctx.filter = "none"
-  // i && (ctx.globalCompositeOperation = "overlay") // cool
-  // i && (ctx.globalCompositeOperation = "color-burn") // cool
-  // i && (ctx.globalCompositeOperation = "hard-light") // cool // screen
-  // i && Math.round(Math.random()) ? ctx.globalCompositeOperation = "lighter" : ctx.globalCompositeOperation = "source-over"
+
+  ctx.drawImage(displayCanvas, 0, 0);
+  (i && Math.random()*2|0)
+    ? ctx.globalCompositeOperation = dark ? "screen" : "hard-light"// Math.random()*2|0 ? "screen" : "multiply"
+    : ctx.globalCompositeOperation = "source-over"
 
   stroke(null)
   fill(color)
   drawpoly()
-  stroke(color, 32)
   fill(null)
-  drawpoly()
+  // stroke(color, 32)
+  // drawpoly()
   stroke(color, 16)
   drawpoly()
   stroke(color, 8)
@@ -85,15 +77,17 @@ const smookie = (color) => {
   i++
 }
 
-const hex = "0123456789abcdef".split("")
-const randcolor = () => Array(7).fill().map((_,i)=>i?hex[Math.floor(Math.random()*16)]:"#").join("").concat("77")
 
-const poll = (num) => {
-  let i = num
-  while (i) {
-    i--
-    smookie(randcolor())
-  }
+
+const fhx = "0123456789abcdef".split("")
+// const chx = "3456789abc".split("")
+const randcolor = () => {
+  const color = "#"+Array(6).fill().map(()=>fhx[Math.random()*16|0]).join("")+"80"
+  // console.log(color)
+  return color
 }
+const poll = (num) => { while (num) num--, smookie(randcolor()) }
 
-poll(5+Math.random()*8|0)
+
+
+poll(8+Math.random()*14|0)
