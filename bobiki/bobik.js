@@ -1,17 +1,17 @@
 import { getcanvas, bg, stroke, fill, mask, clip, shape, CLOSE, vertex, arc, pxratio } from "https://unpkg.com/bratik@latest/dist/bratik.min.js"
 import roundPolygon from "https://unpkg.com/round-polygon@latest/dist/round-polygon.es.js"
+import getGUI from "../gui/gui.js"
 
 let poly
+let dark = Math.random()*2|0
 
 const width = window.innerWidth
 const height = window.innerHeight
 const side = Math.min(width, height)
 const blur = side / 500 * 20 | 0
-console.log(blur);
 
 const { ctx, canvas } = getcanvas(side)
 canvas.style.width = canvas.style.height = `${side}px`
-const dark = Math.random()*2|0
 const pr = pxratio()
 ctx.filter = `blur(${blur}px) contrast(162%) saturate(62%)`
 document.body.style.backgroundColor = dark ? "#000" : "#fff"
@@ -31,7 +31,7 @@ disctx.fillRect(0, 0, side * pr, side * pr)
 
 
 const getpoints = () =>
-  Array(3+Math.random()*11|0).fill().map(() => ({
+  Array(3+Math.random()*16|0).fill().map(() => ({
     x: Math.random() * side,
     y: Math.random() * side
   }))
@@ -62,8 +62,6 @@ const smookie = (color) => {
   fill(color)
   drawpoly()
   fill(null)
-  // stroke(color, 32)
-  // drawpoly()
   stroke(color, 16)
   drawpoly()
   stroke(color, 8)
@@ -91,3 +89,21 @@ const poll = (num) => { while (num) num--, smookie(randcolor()) }
 
 
 poll(8+Math.random()*14|0)
+
+
+
+////////-- ADDITIONS --////////
+const gui = getGUI(
+  { type: "button", name: "reset" },
+)
+gui.reset.onclick = () => {
+  dark = Math.random()*2|0
+  document.body.style.backgroundColor = dark ? "#000" : "#fff"
+  ctx.filter = `none`
+  bg(dark ? "#000" : "#fff")
+  disctx.strokeStyle = "transparent"
+  disctx.fillStyle = dark ? "#000" : "#fff"
+  disctx.fillRect(0, 0, side * pr, side * pr)
+  ctx.filter = `blur(${blur}px) contrast(162%) saturate(62%)`
+  poll(8+Math.random()*14|0)
+}
