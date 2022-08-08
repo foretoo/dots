@@ -1,8 +1,8 @@
 import { newarr, getcanvas, random } from "../utils.js"
-import SimplexNoise from "https://cdn.skypack.dev/simplex-noise" // "../lib/simplex-noise.js"
+import { get_noise } from "../assets/noise.js"
+
 const { pow } = Math,
-      { ctx, width, height } = getcanvas(),
-      simplex = new SimplexNoise()
+      { ctx, width, height } = getcanvas()
 
 const gradients_num = 3,
       layers_num = 3,
@@ -18,9 +18,6 @@ const gradients_num = 3,
 
 
 
-const get_noise = (x, y) => (
-  ( simplex.noise2D(x, y) + 1 ) / 2
-)
 const background = (color = "black") => {
   ctx.fillStyle = color
   ctx.fillRect(0, 0, width, height)
