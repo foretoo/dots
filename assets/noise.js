@@ -1,9 +1,9 @@
-import SimplexNoise from "https://cdn.skypack.dev/simplex-noise"
+import { createNoise2D } from "https://cdn.skypack.dev/simplex-noise"
 
-const simplex = new SimplexNoise()
+const noise2D = createNoise2D()
 
 export const get_noise = (x = 0, y = 0) => (
-  ( simplex.noise2D(x, y) + 1 ) / 2
+  ( noise2D(x, y) + 1 ) / 2
 )
 export const get_noiser = (x = 0, y = 0, scale = 1) => (
   Math.pow(
