@@ -8,7 +8,7 @@ let dark = Math.random()*2|0
 const width = window.innerWidth
 const height = window.innerHeight
 const side = Math.min(width, height)
-const blur = side / 500 * 20 | 0
+const blur = side / 30 | 0
 
 const { ctx, canvas } = getcanvas(side)
 canvas.style.width = canvas.style.height = `${side}px`
@@ -31,7 +31,7 @@ disctx.fillRect(0, 0, side * pr, side * pr)
 
 
 const getpoints = () =>
-  Array(3+Math.random()*16|0).fill().map(() => ({
+  Array(3+Math.random()*11|0).fill().map(() => ({
     x: Math.random() * side,
     y: Math.random() * side
   }))
@@ -46,7 +46,7 @@ const drawpoly = (off = 0) => {
 
 
 let i = 0
-const smookie = (color) => {
+const smookie = (color, num) => {
   poly = roundPolygon(getpoints(), Number.MAX_SAFE_INTEGER)
   
   mask()
@@ -55,7 +55,7 @@ const smookie = (color) => {
 
   ctx.drawImage(displayCanvas, 0, 0);
   (i && Math.random()*2|0)
-    ? ctx.globalCompositeOperation = dark ? "screen" : "hard-light"// Math.random()*2|0 ? "screen" : "multiply"
+    ? ctx.globalCompositeOperation = [ "xor", "destination-atop" ][Math.random()*2|0]
     : ctx.globalCompositeOperation = "source-over"
 
   stroke(null)
@@ -71,24 +71,33 @@ const smookie = (color) => {
   
   clip()
   
-  disctx.drawImage(canvas, 0, 0)
+  if (num) disctx.drawImage(canvas, 0, 0)
+  else {
+    disctx.strokeStyle = "transparent"
+    disctx.fillStyle = dark ? "#000" : "#fff"
+    disctx.fillRect(0, 0, side * pr, side * pr)
+    disctx.drawImage(canvas, 0, 0)
+  }
   i++
 }
 
 
 
-const fhx = "0123456789abcdef".split("")
-// const chx = "3456789abc".split("")
+const hx = "0123456789abcdef".split("")
+const hxq = "456789abcdef".split("")
 const randcolor = () => {
-  const color = "#"+Array(6).fill().map(()=>fhx[Math.random()*16|0]).join("")+"80"
+  const color = "#"+Array(6).fill().map((_,i)=>(i%2?hx:hxq)[Math.random()*(i%2?16:12)|0]).join("")+"80"
   // console.log(color)
   return color
 }
-const poll = (num) => { while (num) num--, smookie(randcolor()) }
+const poll = (num) => {
+  while (num) num--, smookie(randcolor(), num)
+
+}
 
 
 
-poll(8+Math.random()*14|0)
+poll(5+Math.random()*9|0)
 
 
 
@@ -99,11 +108,9 @@ const gui = getGUI(
 gui.reset.onclick = () => {
   dark = Math.random()*2|0
   document.body.style.backgroundColor = dark ? "#000" : "#fff"
-  ctx.filter = `none`
-  bg(dark ? "#000" : "#fff")
   disctx.strokeStyle = "transparent"
-  disctx.fillStyle = dark ? "#000" : "#fff"
+  disctx.fillStyle = dark ? "#000" : "transparent"
   disctx.fillRect(0, 0, side * pr, side * pr)
-  ctx.filter = `blur(${blur}px) contrast(162%) saturate(62%)`
-  poll(8+Math.random()*14|0)
+  clear()
+  poll(5+Math.random()*9|0)
 }
