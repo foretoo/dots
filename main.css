@@ -5,6 +5,7 @@
   font-family: monospace;
   font-size: 20px;
   line-height: 1rem;
+  color: #111;
   box-sizing: border-box;
 }
 html, body {
@@ -25,4 +26,7 @@ main {
 }
 canvas {
   display: block;
+}
+button {
+  cursor: pointer;
 }
