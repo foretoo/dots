@@ -167,7 +167,7 @@ const tryIntersect = throttle(() => {
   clearIntersected(leftController)
   intersectObjects(rightController)
   intersectObjects(leftController)
-}, 125)
+}, 67)
 
 renderer.setAnimationLoop(() => {
   tryIntersect()
@@ -194,12 +194,16 @@ function rand(range) {
   return (Math.random() - 0.5) * 2 * range
 }
 
-const mirrorScalarVector = new THREE.Vector3(-1, 1, -1).multiplyScalar(0.25)
+let session = null
+const SESSION_SCALE = 0.25
+const mirrorScalarVector = new THREE.Vector3(-1, 2, -1).multiplyScalar(SESSION_SCALE)
 renderer.xr.addEventListener('sessionstart', () => {
+  session = renderer.xr.getSession()
   _scene.position.copy(camera.position).multiply(mirrorScalarVector)
-  _scene.scale.multiplyScalar(0.25)
+  _scene.scale.multiplyScalar(SESSION_SCALE)
 })
 renderer.xr.addEventListener('sessionend', () => {
+  session = null
   _scene.position.set(0,0,0)
   _scene.scale.set(1,1,1)
 })
@@ -235,8 +239,16 @@ function clearIntersected(controller) {
   controller.userData.intersected = null
 }
 
+const unitZSize = new THREE.Vector3(0,0,-1)
 function handleGamepad(controller) {
+  if (!session) return
   if (!controller.userData.selected) return
+
+  const { gamepad, userData: { selected }} = controller
+  const length = selected.position.length()
+  const offset = -gamepad.axes[3]
+  const scale = (length > 0.2 || offset > 0) ? 0.02 * length * offset : 0
+  selected.position.addScaledVector(unitZSize, scale)
 }
 
 
