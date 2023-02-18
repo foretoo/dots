@@ -115,3 +115,34 @@ export const getcanvas = (w, h, id) => {
 
   return { canvas, ctx, width, height }
 }
+
+
+
+export function debounce(fn, wait = 100, context) {
+  let timer
+  return (...args) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.apply(context, args)
+    }, wait)
+  }
+}
+
+export const throttle = (fn, wait = 100, context) => {
+  let lastTime = 0
+  let timer
+  return (...args) => {
+    clearTimeout(timer)
+    const now = performance.now()
+    const delta = now - lastTime
+    if (delta >= wait) {
+      lastTime = now
+      fn.apply(context, args)
+    } else {
+      timer = setTimeout(() => {
+        lastTime = performance.now()
+        fn.apply(context, args)
+      }, wait - delta)
+    }
+  }
+}
