@@ -1,0 +1,6 @@
+button {
+  position: absolute;
+}
+#tone-mapper {
+  top: calc(1rem + 1px);
+}
