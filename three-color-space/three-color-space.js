@@ -92,7 +92,7 @@ const geometries = [
 for (const color of colors) {
   const mesh = new THREE.Mesh(
     geometries[Math.random() * geometries.length | 0],
-    new THREE.MeshStandardMaterial({ color }),
+    new THREE.MeshStandardMaterial({ color, flatShading: true }),
   )
   mesh.position.set(rand(3), rand(3), rand(3))
   mesh.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI))
@@ -167,27 +167,16 @@ const tryIntersect = throttle(() => {
   clearIntersected(leftController)
   intersectObjects(rightController)
   intersectObjects(leftController)
-}, 100)
+}, 125)
 
 renderer.setAnimationLoop(() => {
   tryIntersect()
-  sessionHandler()
+  handleGamepad(rightController)
+  handleGamepad(leftController)
 
   controls.update()
   renderer.render(scene, camera)
 })
-
-function sessionHandler() {
-  const session = renderer.xr.getSession()
-  if (!session) return
-  if (!session.inputSources) return
-  if (!isIterable(session.inputSources)) return
-
-  session.inputSources[0].gamepad.buttons.forEach((btn, i) => {
-    if (!btn.value) return
-    console.log(i, btn.value)
-  })
-}
 
 
 
@@ -205,10 +194,10 @@ function rand(range) {
   return (Math.random() - 0.5) * 2 * range
 }
 
-const mirrorScalarVector = new THREE.Vector3(-1, 1, -1).multiplyScalar(0.5)
+const mirrorScalarVector = new THREE.Vector3(-1, 1, -1).multiplyScalar(0.25)
 renderer.xr.addEventListener('sessionstart', () => {
   _scene.position.copy(camera.position).multiply(mirrorScalarVector)
-  _scene.scale.multiplyScalar(0.5)
+  _scene.scale.multiplyScalar(0.25)
 })
 renderer.xr.addEventListener('sessionend', () => {
   _scene.position.set(0,0,0)
@@ -246,8 +235,8 @@ function clearIntersected(controller) {
   controller.userData.intersected = null
 }
 
-function isIterable(object) {
-  return typeof object[Symbol.iterator] === "function"
+function handleGamepad(controller) {
+  if (!controller.userData.selected) return
 }
 
 
